@@ -21,9 +21,9 @@ class BoxResource extends JsonResource
             // 'price' => $this->price,
             'detail' => new DetailResource($this->detail),
             'products' => ProductResource::collection($this->products),
-            'productsWithTrashed' => ProductResource::collection(
-                $this->whenLoaded('products')->withTrashed()->get()
-            ),
+            // 'productsWithTrashed' => ProductResource::collection(
+            //     $this->whenLoaded('products')->withTrashed()->get()
+            // ),
         ];
     }
 }

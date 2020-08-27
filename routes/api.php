@@ -33,4 +33,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('boxes', 'BoxController');
     Route::apiResource('bundles', 'BundleController');
     Route::apiResource('products', 'ProductController');
+    Route::apiResource('categories', 'CategoryController');
 });

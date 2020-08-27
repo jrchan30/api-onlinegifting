@@ -18,7 +18,7 @@ class DetailResource extends JsonResource
             'id' => $this->id,
             'colour' => $this->colour,
             'image' => new ImageResource($this->image),
-            'categories' => CategoryResource::collection($this->categories),
+            'categories' => CategoryResource::collection($this->category),
         ];
     }
 }

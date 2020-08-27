@@ -14,10 +14,12 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
+
         factory(Product::class, 10)->create()->each(function ($product) {
             $random = random_int(1, 2);
             $product->images()->saveMany(factory(Image::class, $random)->make());
-            $product->categories()->saveMany(factory(Category::class, $random)->make());
+            // $product->category()->save(factory(Category::class)->make());
+            $product->category()->attach(rand(1, 10));
         });
     }
 }

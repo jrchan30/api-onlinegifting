@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BundleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check.admin', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +23,8 @@ class BundleController extends Controller
      */
     public function index()
     {
-        return BundleResource::collection(Bundle::paginate(10));
+        $bundles = Bundle::latest()->paginate(10);
+        return BundleResource::collection($bundles);
     }
 
     /**
@@ -31,28 +36,24 @@ class BundleController extends Controller
     public function store(Request $request)
     {
 
-        if (auth()->user()->userDetail->type == 'admin') {
-            $validated = $this->validate($request, [
-                'name' => 'required',
-                'products' => 'required|array',
-            ]);
+        $validated = $this->validate($request, [
+            'name' => 'required',
+            'products' => 'required|array',
+        ]);
 
-            $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
+        $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
 
-            $id = auth()->user()->id;
+        $id = auth()->user()->id;
 
-            $bundle = Bundle::create([
-                'user_id' => $id,
-                'name' => $validated['name'],
-                'price' => $calculatedPrice,
-            ]);
+        $bundle = Bundle::create([
+            'user_id' => $id,
+            'name' => $validated['name'],
+            // 'price' => $calculatedPrice,
+        ]);
 
-            $bundle->products()->attach($validated['products']);
+        $bundle->products()->attach($validated['products']);
 
-            return new BundleResource($bundle);
-        } else {
-            return response(['Error' => 'Forbidden'], 403);
-        }
+        return new BundleResource($bundle);
     }
 
     /**
@@ -80,19 +81,13 @@ class BundleController extends Controller
             'products' => 'sometimes|array',
         ]);
 
-        $user = auth()->user()->id;
-
         if ($request->has('products')) {
             // $validated['price'] = Product::whereIn('id', $validated['products'])->sum('price');
             $bundle->products()->sync($validated['products']);
         }
 
-        if ($bundle->user_id == $user) {
-            $bundle->update($validated);
-            return new BundleResource($bundle);
-        } else {
-            return response()->json(['Error' => 'Forbidden Not Your Bundle'], 403);
-        }
+        $bundle->update($validated);
+        return new BundleResource($bundle);
     }
 
     /**
@@ -103,13 +98,7 @@ class BundleController extends Controller
      */
     public function destroy(Bundle $bundle)
     {
-        $own = $bundle->user_id == auth()->user()->id;
-
-        if ($own) {
-            $bundle->delete();
-            return response('', 204);
-        } else {
-            return response()->json(['Error' => 'Forbidden Not Your Bundle'], 403);
-        }
+        $bundle->delete();
+        return response('', 204);
     }
 }

@@ -17,11 +17,12 @@ class BundleSeeder extends Seeder
     public function run()
     {
         $products = Product::all();
+        $categories = Category::all();
 
-        factory(Bundle::class, 10)->create()->each(function ($bundle) use ($products) {
+        factory(Bundle::class, 10)->create()->each(function ($bundle) use ($products, $categories) {
             $bundle->detail()->save(factory(Detail::class)->make());
             $bundle->detail->image()->save(factory(Image::class)->make());
-            $bundle->detail->categories()->saveMany(factory(Category::class, 2)->make());
+            $bundle->detail->category()->attach(rand(1, 10));
 
             $bundle->products()->attach($products->random(rand(2, 5))->pluck('id')->toArray());
 

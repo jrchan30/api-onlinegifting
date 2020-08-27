@@ -17,7 +17,7 @@ class BoxController extends Controller
      */
     public function index()
     {
-        $box = Box::where('user_id', auth()->user()->id)->latest()->paginate(5);
+        $box = Box::where('user_id', auth()->user()->id)->with('products')->latest()->paginate(5);
 
         return BoxResource::collection($box);
     }

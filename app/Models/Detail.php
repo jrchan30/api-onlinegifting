@@ -12,9 +12,9 @@ class Detail extends Model
         'colour', 'detailable_id', 'detailable_type',
     ];
 
-    public function categories()
+    public function category()
     {
-        return $this->morphMany('App\Models\Category', 'categoriable');
+        return $this->morphToMany('App\Models\Category', 'categoriable');
     }
 
     public function detailable()

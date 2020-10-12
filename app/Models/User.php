@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+// use Illuminate\Auth\Notifications\VerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\VerifyEmail;
+use App\Notifications\ResetPassword;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
 
@@ -17,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'name', 'email', 'password',
     ];
 
     /**
@@ -56,5 +59,16 @@ class User extends Authenticatable
     public function bundles()
     {
         return $this->hasMany(Bundle::class);
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
+    }
+
+    //cek import notificaiton resetPassword keknya masih salah
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }

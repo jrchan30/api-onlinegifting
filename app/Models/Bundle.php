@@ -35,6 +35,16 @@ class Bundle extends Model
         return $this->morphToMany('App\Models\Product', 'productable');
     }
 
+    public function reviews()
+    {
+        return $this->morphMany('App\Models\Review', 'reviewable');
+    }
+
+    public function discussions()
+    {
+        return $this->morphMany('App\Models\Discussion', 'discussionable');
+    }
+
     // public function calculatePrice()
     // {
     //     $calculated = $this->products->sum(function ($products) {

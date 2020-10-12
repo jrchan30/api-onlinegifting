@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -22,13 +27,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -36,5 +34,66 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function attemptLogin(Request $request)
+    {
+        $token =  $this->guard()->attempt(
+            $this->credentials($request),
+            $request->filled('remember')
+        );
+
+        if (!$token) {
+            return false;
+        }
+
+        $user = $this->guard()->user();
+
+        if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return response()->json(["Messages" => "Login successfull"]);
+        // return $request;
+    }
+
+    public function sendFailedLoginResponse(Request $request)
+    {
+        $user = $this->guard()->user();
+
+        if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
+            Auth::logout();
+            return response()->json(["Errors" => "You need to verify your email account"], 403);
+        }
+
+        throw ValidationException::withMessages([
+            $this->username() => "Invalid credentials"
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return response()->json(["Message" => "Logout successful"]);
+        }
     }
 }

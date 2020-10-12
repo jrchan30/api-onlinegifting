@@ -34,4 +34,14 @@ class Product extends Model
     {
         return $this->morphMany('App\Models\Image', 'imageable');
     }
+
+    public function reviews()
+    {
+        return $this->morphMany('App\Models\Review', 'reviewable');
+    }
+
+    public function discussions()
+    {
+        return $this->morphMany('App\Models\Discussion', 'discussionable');
+    }
 }

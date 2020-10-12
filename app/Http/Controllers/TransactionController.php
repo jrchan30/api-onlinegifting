@@ -28,7 +28,16 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $this->validate($request, [
+            'delivery_fee' => 'required|numeric',
+            'total_price' => 'required|numeric',
+            'receiver_location' => 'required|numeric',
+            'arrival_date' => 'required|date'
+        ]);
+
+        $transaction = Transaction::create($validated);
+
+        return new TransactionResource($transaction);
     }
 
     /**
@@ -66,6 +75,11 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        //
+        // if($transaction->user_id == auth()->user()->id){
+        //     $transaction->delete();
+        //     return response()->json('Successfully Deleted', 204);
+        // }else{
+        //     return response()->json(['Error' => 'Forbidden Not Your Transaction'], 403);
+        // }
     }
 }

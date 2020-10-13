@@ -15,6 +15,8 @@ class CreateRepliesTable extends Migration
     {
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('discussion_id');
+            $table->string('body');
             $table->timestamps();
         });
     }

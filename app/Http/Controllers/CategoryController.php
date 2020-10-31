@@ -19,8 +19,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest()->get();
+        $categories = Category::whereNull('category_id')
+            ->with('allSubCategories')
+            ->get();
         return CategoryResource::collection($categories);
+
+        // $categories = Category::latest()->get();
+        // return CategoryResource::collection($categories);
     }
 
     /**

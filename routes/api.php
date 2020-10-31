@@ -20,9 +20,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users', 'UserController@index');
     Route::patch('/users/{id}', 'UserController@update');
 
-    Route::apiResource('userDetails', 'UserDetailController');
+    Route::apiResource('user-details', 'UserDetailController');
     Route::apiResource('transactions', 'TransactionController');
     Route::apiResource('boxes', 'BoxController');
+    Route::apiResource('likes', 'LikeController');
+    Route::apiResource('discussions', 'DiscussionController');
+    Route::apiResource('replies', 'ReplyController');
 });
 
 Route::apiResource('bundles', 'BundleController');
@@ -30,3 +33,6 @@ Route::apiResource('categories', 'CategoryController');
 Route::apiResource('products', 'ProductController');
 Route::get('/latest-products', 'ProductController@latestProducts');
 Route::get('/low-price', 'ProductController@lowPrice');
+
+// Route::get('/product-discussions/{id}', 'DiscussionController@productDiscussions');
+// Route::get('/bundle-discussions/{id}', 'DiscussionController@bundleDiscussions');

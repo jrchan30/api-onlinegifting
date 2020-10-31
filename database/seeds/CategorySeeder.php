@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 
 class CategorySeeder extends Seeder
 {
@@ -12,6 +13,15 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        factory(Category::class, 10)->create();
+        // factory(Category::class, 10)->create();
+        $json = File::get("database/seeds/data/category.json");
+        $data = json_decode($json);
+        foreach ($data as $obj) {
+            Category::create([
+                'id' => $obj->id,
+                'name' => $obj->name,
+                'category_id' => $obj->category_id,
+            ]);
+        }
     }
 }

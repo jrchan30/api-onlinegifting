@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "name": "Boys",
+        "category_id": null
+    },
+    {
+        "id": 2,
+        "name": "Girls",
+        "category_id": null
+    },
+    {
+        "id": 3,
+        "name": "Men",
+        "category_id": null
+    },
+    {
+        "id": 4,
+        "name": "Women",
+        "category_id": null
+    },
+    {
+        "id": 5,
+        "name": "Gadgets",
+        "category_id": null
+    },
+    {
+        "id": 6,
+        "name": "Emoji Lamp",
+        "category_id": 5
+    },
+    {
+        "id": 7,
+        "name": "Smart Bulb",
+        "category_id": 5
+    },
+    {
+        "id": 8,
+        "name": "Accessories",
+        "category_id": null
+    },
+    {
+        "id": 9,
+        "name": "Casing X12",
+        "category_id": 8
+    }
+]

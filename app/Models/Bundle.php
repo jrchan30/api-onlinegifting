@@ -45,6 +45,11 @@ class Bundle extends Model
         return $this->morphMany('App\Models\Discussion', 'discussionable');
     }
 
+    public function likes()
+    {
+        return $this->morphMany('App\Models\Like', 'likeable');
+    }
+
     // public function calculatePrice()
     // {
     //     $calculated = $this->products->sum(function ($products) {

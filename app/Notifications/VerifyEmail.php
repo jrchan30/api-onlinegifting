@@ -8,11 +8,14 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\URL;
 
-class VerifyEmail extends Notifications
+class VerifyEmail extends Notifications implements ShouldQueue
 {
+    use Queueable;
+
     protected function verificationUrl($notifiable)
     {
-        $appUrl = env('CLIENT_URL');
+        // $appUrl = env('CLIENT_URL');
+        $appUrl = config('app.client_url');
 
         $url = URL::temporarySignedRoute(
             'verification.verify',

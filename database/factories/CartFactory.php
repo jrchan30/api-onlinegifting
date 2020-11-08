@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\Transaction;
+use App\Models\Cart;
 use Faker\Generator as Faker;
 
-$factory->define(Transaction::class, function (Faker $faker) {
+$factory->define(Cart::class, function (Faker $faker) {
     return [
         'delivery_fee' => $faker->randomNumber(5),
         'total_price' => $faker->randomNumber(8),

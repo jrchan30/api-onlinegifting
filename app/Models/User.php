@@ -8,11 +8,12 @@ use App\Notifications\VerifyEmail;
 use App\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable;
+    use SoftDeletes, HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,9 +47,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserDetail::class);
     }
 
-    public function transactions()
+    public function cart()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasOne(Cart::class);
     }
 
     public function boxes()
@@ -63,7 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
 
     //cek import notificaiton resetPassword keknya masih salah

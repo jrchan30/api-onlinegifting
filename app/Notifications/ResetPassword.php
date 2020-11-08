@@ -7,8 +7,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ResetPassword extends Notification
+class ResetPassword extends Notification implements ShouldQueue
 {
+
+    use Queueable;
     /**
      * Get the mail representation of the notification.
      *

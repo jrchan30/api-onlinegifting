@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TransactionResource;
-use App\Models\Transaction;
+use App\Http\Resources\CartResource;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transaction = Transaction::where('user_id', auth()->user()->id)->latest()->paginate(10);
+        $cart = Cart::where('user_id', auth()->user()->id)->latest()->paginate(10);
 
-        return TransactionResource::collection($transaction);
+        return CartResource::collection($cart);
     }
 
     /**
@@ -35,21 +35,21 @@ class TransactionController extends Controller
             'arrival_date' => 'required|date'
         ]);
 
-        $transaction = Transaction::create($validated);
+        $cart = Cart::create($validated);
 
-        return new TransactionResource($transaction);
+        return new CartResource($cart);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaction $transaction)
+    public function show(Cart $cart)
     {
-        if ($transaction->user_id == auth()->user()->id) {
-            return new TransactionResource($transaction);
+        if ($cart->user_id == auth()->user()->id) {
+            return new CartResource($cart);
         } else {
             return response()->json(['error' => 'Forbidden'], 403);
         }
@@ -59,10 +59,10 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaction  $transaction
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, Cart $cart)
     {
         //
     }
@@ -70,10 +70,10 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Cart $cart)
     {
         // if($transaction->user_id == auth()->user()->id){
         //     $transaction->delete();

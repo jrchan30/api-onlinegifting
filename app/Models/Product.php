@@ -49,4 +49,21 @@ class Product extends Model
     {
         return $this->morphMany('App\Models\Like', 'likeable');
     }
+
+    public function avgRating()
+    {
+        $reviews = $this->reviews;
+        $count = $reviews->count();
+
+        $totalRate = $reviews->sum(function ($x) {
+            return $x->rating;
+        });
+
+        return $count > 0 ?  $totalRate / $count : null;
+    }
+
+    public function boxProductQuantities()
+    {
+        return $this->hasMany(BoxProductQuantity::class);
+    }
 }

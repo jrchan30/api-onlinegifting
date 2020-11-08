@@ -20,9 +20,9 @@ class Box extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function transactions()
+    public function carts()
     {
-        return $this->morphToMany('App\Models\Transaction', 'transactionable');
+        return $this->morphToMany('App\Models\Cart', 'cartable');
     }
 
     public function detail()
@@ -33,6 +33,11 @@ class Box extends Model
     public function products()
     {
         return $this->morphToMany('App\Models\Product', 'productable');
+    }
+
+    public function boxProductQuantities()
+    {
+        return $this->hasMany(BoxProductQuantity::class);
     }
 
     // public function calculatePrice()

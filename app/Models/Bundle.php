@@ -20,9 +20,9 @@ class Bundle extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function transactions()
+    public function carts()
     {
-        return $this->morphToMany('App\Models\Transaction', 'transactionable');
+        return $this->morphToMany('App\Models\Cart', 'cartable');
     }
 
     public function detail()
@@ -50,13 +50,11 @@ class Bundle extends Model
         return $this->morphMany('App\Models\Like', 'likeable');
     }
 
-    // public function calculatePrice()
-    // {
-    //     $calculated = $this->products->sum(function ($products) {
-    //         return $products->price;
-    //     });
-
-    //     $this->price = $calculated;
-    //     $this->save();
-    // }
+    public function calculatePrice()
+    {
+        $calculated = $this->products->sum(function ($products) {
+            return $products->price;
+        });
+        return $calculated;
+    }
 }

@@ -32,22 +32,23 @@ class BoxController extends Controller
     {
         $validated = $this->validate($request, [
             'name' => 'required',
-            'products' => 'required|array',
+            'products' => 'sometimes|array',
         ]);
 
 
         $user = auth()->user()->id;
 
-        $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
+        // $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
 
         $box = Box::create([
             'user_id' => $user,
             'name' => $validated['name'],
-            'price' => $calculatedPrice,
+            // 'price' => $calculatedPrice,
         ]);
 
-        $box->products()->attach($validated['products']);
-
+        if ($request->has('products')) {
+            $box->products()->attach($validated['products']);
+        }
         return new BoxResource($box);
     }
 
@@ -80,21 +81,20 @@ class BoxController extends Controller
             'products' => 'sometimes|array',
         ]);
 
-        $user = auth()->user()->id;
+        $userId = auth()->user()->id;
+
+
+        if ($box->user_id != $userId) {
+            return response(['error' => 'Forbidden Not Your Box'], 403);
+        }
 
         if ($request->has('products')) {
-
             // $validated['price'] = Product::whereIn('id', $validated['products'])->sum('price');
             $box->products()->sync($validated['products']);
         }
 
-
-        if ($box->user_id == $user) {
-            $box->update($validated);
-            return new BoxResource($box);
-        } else {
-            return response(['error' => 'Forbidden Not Your Box'], 403);
-        }
+        $box->update($validated);
+        return new BoxResource($box);
     }
 
     /**

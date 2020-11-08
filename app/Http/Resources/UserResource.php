@@ -15,17 +15,18 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $detail = null;
-        if (auth()->user()) {
-            if (auth()->user()->id == $this->id) {
-                $detail = new UserDetailResource($this->userDetail);
-            }
-        }
+        // $detail = null;
+        // if (auth()->user()) {
+        //     if (auth()->user()->id == $this->id) {
+        //         $detail = new UserDetailResource($this->userDetail);
+        //     }
+        // }
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'detail' => $detail
+            'detail' => new UserDetailResource($this->userDetail),
+            'type' => $this->userDetail->type ?? 'customer'
         ];
     }
 }

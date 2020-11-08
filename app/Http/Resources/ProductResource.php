@@ -24,7 +24,8 @@ class ProductResource extends JsonResource
             'categories' => CategoryResource::collection($this->category),
             'likes_count' => $this->likes->count(),
             'discussions' => DiscussionResource::collection($this->discussions),
-            'reviews' => ReviewResource::collection($this->reviews)
+            'reviews' => ReviewResource::collection($this->reviews),
+            'avg_rating' => $this->avgRating()
         ];
     }
 }

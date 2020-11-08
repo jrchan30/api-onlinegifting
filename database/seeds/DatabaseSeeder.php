@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             BundleSeeder::class,
             UserSeeder::class,
+            TransactionSeeder::class
         ]);
     }
 }

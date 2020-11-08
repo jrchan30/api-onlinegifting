@@ -22,7 +22,8 @@ class BundleResource extends JsonResource
             'products' => ProductResource::collection($this->products),
             'likes_count' => $this->likes->count(),
             'discussions' => DiscussionResource::collection($this->discussions),
-            'reviews' => ReviewResource::collection($this->reviews)
+            'reviews' => ReviewResource::collection($this->reviews),
+            'price' => $this->calculatePrice(),
         ];
     }
 }

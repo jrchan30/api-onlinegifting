@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Transaction extends Model
+
+class Cart extends Model
 {
-    protected $table = 'transactions';
+    use SoftDeletes;
+
+    protected $table = 'carts';
 
     protected $fillable = [
         'user_id', 'total_price', 'receiver_location', 'arrival_date'
@@ -19,11 +23,11 @@ class Transaction extends Model
 
     public function bundles()
     {
-        return $this->morphedByMany('App\Models\Bundle', 'transactionable');
+        return $this->morphedByMany('App\Models\Bundle', 'cartable');
     }
 
     public function boxes()
     {
-        return $this->morphedByMany('App\Models\Box', 'transactionable');
+        return $this->morphedByMany('App\Models\Box', 'cartable');
     }
 }

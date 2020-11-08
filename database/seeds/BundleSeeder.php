@@ -19,7 +19,7 @@ class BundleSeeder extends Seeder
         $products = Product::all();
         $categories = Category::all();
 
-        factory(Bundle::class, 10)->create()->each(function ($bundle) use ($products, $categories) {
+        factory(Bundle::class, 50)->create()->each(function ($bundle) use ($products, $categories) {
             $bundle->detail()->save(factory(Detail::class)->make());
             $bundle->detail->image()->save(factory(Image::class)->make());
             $bundle->detail->category()->attach(rand(1, 10));

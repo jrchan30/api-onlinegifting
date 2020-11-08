@@ -50,6 +50,11 @@ class Bundle extends Model
         return $this->morphMany('App\Models\Like', 'likeable');
     }
 
+    public function productQuantities()
+    {
+        return $this->morphMany('App\Models\ProductQuantity', 'product_quantitable');
+    }
+
     public function calculatePrice()
     {
         $calculated = $this->products->sum(function ($products) {

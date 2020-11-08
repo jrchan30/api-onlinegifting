@@ -40,12 +40,11 @@ class UserSeeder extends Seeder
                 $productsId = $allProducts->pluck('id');
 
                 foreach ($productsId as $id) {
-                    $box->boxProductQuantities()->create([
+                    $box->productQuantities()->create([
                         'product_id' => $id,
                         'quantity' => random_int(1, 5)
                     ]);
                 }
-                // $box->calculatePrice();
             }
 
             $user->cart()->save(factory(Cart::class)->make());

@@ -67,31 +67,31 @@ class UserSeeder extends Seeder
                 $cart->bundles()->attach($bundles->random(rand(1, 2))->pluck('id')->toArray());
             }
 
-            $cartBoxesTotalPrice = 0;
-            $cartBundlesTotalPrice = 0;
-            if ($cart->boxes()->exists()) {
-                $boxesInCart = $cart->boxes()->get();
-                foreach ($boxesInCart as $boxInCart) {
-                    $rows = $boxInCart->boxProductQuantities()->get();
-                    foreach ($rows as $row) {
-                        $productPrice = $row->product->price;
-                        $totalProductPrice = $row->quantity * $productPrice;
+            // $cartBoxesTotalPrice = 0;
+            // $cartBundlesTotalPrice = 0;
+            // if ($cart->boxes()->exists()) {
+            //     $boxesInCart = $cart->boxes()->get();
+            //     foreach ($boxesInCart as $boxInCart) {
+            //         $rows = $boxInCart->boxProductQuantities()->get();
+            //         foreach ($rows as $row) {
+            //             $productPrice = $row->product->price;
+            //             $totalProductPrice = $row->quantity * $productPrice;
 
-                        $cartBoxesTotalPrice += $totalProductPrice;
-                    }
-                }
-            }
-            if ($cart->bundles()->exists()) {
-                $bundlesInCart = $cart->bundles()->get();
-                foreach ($bundlesInCart as $bundleInCart) {
-                    $sumBundlePrice = $bundleInCart->products()->sum('price');
-                    $cartBundlesTotalPrice += $sumBundlePrice;
-                }
-            }
+            //             $cartBoxesTotalPrice += $totalProductPrice;
+            //         }
+            //     }
+            // }
+            // if ($cart->bundles()->exists()) {
+            //     $bundlesInCart = $cart->bundles()->get();
+            //     foreach ($bundlesInCart as $bundleInCart) {
+            //         $sumBundlePrice = $bundleInCart->products()->sum('price');
+            //         $cartBundlesTotalPrice += $sumBundlePrice;
+            //     }
+            // }
 
-            $deliveryFee = $cart->delivery_fee;
-            $cart->total_price = $cartBoxesTotalPrice + $cartBundlesTotalPrice + $deliveryFee;
-            $cart->save();
+            // $deliveryFee = $cart->delivery_fee;
+            // $cart->total_price = $cartBoxesTotalPrice + $cartBundlesTotalPrice + $deliveryFee;
+            // $cart->save();
         });
     }
 }

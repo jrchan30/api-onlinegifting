@@ -11,5 +11,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'description' => $faker->sentence(),
         'price' => $faker->randomNumber(6),
         'stock' => $faker->randomNumber(2),
+        'weight' => $faker->randomNumber(2),
     ];
 });

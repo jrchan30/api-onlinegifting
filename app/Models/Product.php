@@ -12,7 +12,7 @@ class Product extends Model
     protected $table = 'products';
 
     protected $fillable = [
-        'name', 'description', 'price', 'stock',
+        'name', 'description', 'price', 'stock', 'weight'
     ];
 
     public function bundles()

@@ -3,17 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Cart extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'carts';
 
     protected $fillable = [
-        'user_id', 'total_price', 'receiver_location', 'arrival_date'
+        'user_id'
     ];
 
     public function user()

@@ -19,6 +19,7 @@ class CreatePaidProductsTable extends Migration
             $table->string('description');
             $table->integer('price');
             $table->integer('quantity');
+            $table->integer('weight');
             $table->unsignedBigInteger('paid_productable_id');
             $table->string('paid_productable_type');
             $table->timestamps();

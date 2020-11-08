@@ -9,7 +9,7 @@ class PaidProduct extends Model
     protected $table = 'paid_products';
 
     protected $fillable = [
-        'name', 'description', 'price', 'quantity', 'path', 'url'
+        'name', 'description', 'price', 'quantity', 'weight', 'path', 'url'
     ];
 
     public function paidProductable()

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Auth\Notifications\VerifyEmail;
+
+use App\Models\Paid\Transaction;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmail;
 use App\Notifications\ResetPassword;
@@ -60,6 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function bundles()
     {
         return $this->hasMany(Bundle::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     public function sendEmailVerificationNotification()

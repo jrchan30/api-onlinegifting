@@ -10,8 +10,15 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
-        'user_id', 'transaction_number', 'payment_type', 'total_price',
-        'receiver_location', 'arrival_date'
+        'user_id', 'transaction_number', 'payment_type', 'receiver_full_address',
+        'receiver_destination_code',
+        'total_weight',
+        'receiver_phone_number',
+        'delivery_courier_code',
+        'delivery_courier_service',
+        'delivery_fee',
+        'total_price',
+        'arrival_date'
     ];
 
     public function user()

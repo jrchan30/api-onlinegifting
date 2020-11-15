@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -20,7 +23,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::latest()->paginate(10));
+        $products = Product::latest();
+        if (Auth::user()->userDetail->type != 'admin') {
+            $products = $products->where('stock', '>', 0);
+        }
+        return ProductResource::collection($products->paginate(12));
     }
 
     public function latestProducts()
@@ -32,6 +39,12 @@ class ProductController extends Controller
     {
         return ProductResource::collection(Product::latest()->where('price', '<', '2000000')->paginate(10));
     }
+
+    public function trashedProducts()
+    {
+        $trashed = Product::onlyTrashed()->paginate(12);
+        return ProductResource::collection($trashed);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -40,28 +53,54 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $image = $request->file('images');
-        $filename = time() . "_" . preg_replace('/\s+/', '_', strtolower($image->getClientOriginalName()));
-        $image->storeAs('public/cv/', $filename, 'local');
-
         $validated = $this->validate($request, [
             'name' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
-        ]);
-
-        $validatedImages = $this->validate($request, [
+            'weight' => 'required|numeric',
+            'categories' => 'required|array',
+            'categories.*' => 'required|numeric',
             'images' => 'required|array',
+            'images.*' => 'required|image',
         ]);
 
-        $validatedCategories = $this->validate($request, [
-            'category' => 'required|numeric'
+        $product = Product::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'weight' => $validated['weight'],
         ]);
 
-        $product = Product::create($validated);
-        $product->images()->attach($validatedImages);
-        $product->category()->attach($validatedCategories);
+        foreach ($validated['images'] as $image) {
+            $file = $image;
+
+            $fileName = sha1(time());
+            $fileExtension = $file->getClientOriginalExtension();
+            $fullFileName = $fileName . '.' . $fileExtension;
+            $storage = env('APP_ENV', 'local') ?  'public' : 's3';
+            $path = 'product_pictures/';
+
+            $file->storeAs($path, $fullFileName, ['disk' => $storage]);
+
+            if (env('APP_ENV') == 'local') {
+                $imageModel = new Image([
+                    'path' => $path . $fullFileName,
+                    'url' =>  'http://localhost:8000' . Storage::url($path . $fullFileName)
+                ]);
+            } else if (env('APP_ENV') == 'production') {
+                return response()->json('ERROR', 500);
+            }
+
+            $product->images()->save($imageModel);
+        }
+
+        foreach ($validated['categories'] as $categoryId) {
+            $cat = Category::find($categoryId);
+
+            $product->categories()->attach($cat);
+        }
 
         return new ProductResource($product);
     }
@@ -86,7 +125,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
     }
 
     /**

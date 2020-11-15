@@ -25,7 +25,7 @@ class Product extends Model
         return $this->morphedByMany('App\Models\Box', 'productable');
     }
 
-    public function category()
+    public function categories()
     {
         return $this->morphToMany('App\Models\Category', 'categoriable');
     }

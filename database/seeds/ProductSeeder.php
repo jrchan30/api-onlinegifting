@@ -19,7 +19,7 @@ class ProductSeeder extends Seeder
             $random = random_int(1, 2);
             $product->images()->saveMany(factory(Image::class, $random)->make());
             // $product->category()->save(factory(Category::class)->make());
-            $product->category()->attach(rand(1, 10));
+            $product->categories()->attach(rand(2, 5));
         });
     }
 }

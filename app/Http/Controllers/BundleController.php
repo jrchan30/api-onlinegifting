@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BundleController extends Controller
 {
@@ -23,8 +24,7 @@ class BundleController extends Controller
      */
     public function index()
     {
-        $bundles = Bundle::latest()->paginate(10);
-        return BundleResource::collection($bundles);
+        return BundleResource::collection(Bundle::latest()->paginate(10));
     }
 
     /**

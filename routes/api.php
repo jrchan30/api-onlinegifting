@@ -12,10 +12,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', 'Auth\RegisterController@register');
 Route::post('verification/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verification/resend', 'Auth\VerificationController@resend');
-// Route::post('login', 'Auth\LoginController@login');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-// Route::get('sanctum/csrf-cookie', 'CsrfController@show');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');

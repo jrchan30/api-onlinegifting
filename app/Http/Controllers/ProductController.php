@@ -76,22 +76,13 @@ class ProductController extends Controller
         foreach ($validated['images'] as $image) {
             $file = $image;
 
-            $fileName = sha1(time());
-            $fileExtension = $file->getClientOriginalExtension();
-            $fullFileName = $fileName . '.' . $fileExtension;
-            $storage = env('APP_ENV', 'local') ?  'public' : 's3';
-            $path = 'product_pictures/';
+            $upload = $file->store("product_images/{$product->id}", 's3');
+            Storage::disk('s3')->setVisibility($upload, 'public');
+            $imageModel = new Image([
+                'path' => basename($upload),
+                'url' =>  Storage::url($upload)
+            ]);
 
-            $file->storeAs($path, $fullFileName, ['disk' => $storage]);
-
-            if (env('APP_ENV') == 'local') {
-                $imageModel = new Image([
-                    'path' => $path . $fullFileName,
-                    'url' =>  'http://localhost:8000' . Storage::url($path . $fullFileName)
-                ]);
-            } else if (env('APP_ENV') == 'production') {
-                return response()->json('ERROR', 500);
-            }
 
             $product->images()->save($imageModel);
         }
@@ -125,6 +116,42 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $validated = $this->validate($request, [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'weight' => 'required|numeric',
+            'categories' => 'required|array',
+            'categories.*' => 'required|numeric',
+            'delete_image' => 'sometimes|array',
+            'delete_image.*' => 'sometimes|numeric',
+            'new_images' => 'sometimes|array',
+            'new_images.*' => 'sometimes|image',
+        ]);
+
+        if (array_key_exists("new_images", $validated)) {
+            foreach ($validated['new_images'] as $image) {
+                $file = $image;
+
+                $upload = $file->store("product_images/{$product->id}", 's3');
+                Storage::disk('s3')->setVisibility($upload, 'public');
+                $imageModel = new Image([
+                    'path' => basename($upload),
+                    'url' =>  Storage::url($upload)
+                ]);
+
+                $product->images()->save($imageModel);
+            }
+        }
+
+        $product->categories()->sync($validated['categories']);
+
+        if (array_key_exists("delete_image", $validated)) {
+            $product->images()->whereIn('id', $validated['delete_image'])->delete();
+        }
+
+        return new ProductResource($product);
     }
 
     /**

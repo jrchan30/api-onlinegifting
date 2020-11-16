@@ -87,7 +87,8 @@ class TransactionSeeder extends Seeder
         $courier = $courierCodes[array_rand($courierCodes, 1)];
 
         $response = Http::asForm()->withHeaders([
-            'key' => env('RAJA_ONGKIR_KEY'),
+            // 'key' => env('RAJA_ONGKIR_KEY'),
+            'key' => '43a49ea5195272f21e0c2afd4e8c2ecb'
         ])->post("https://api.rajaongkir.com/starter/cost", [
             'origin' => '501',
             'destination' => "{$destination}",

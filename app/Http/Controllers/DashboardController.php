@@ -32,8 +32,6 @@ class DashboardController extends Controller
             $user_percentage = round((($user_current_month_count - $user_last_month_count) / $user_last_month_count * 100), 2);
         }
 
-        $user_percentage = round((($user_current_month_count - $user_last_month_count) / $user_last_month_count * 100), 2);
-
         // New Products
         $product_current_month_count = Product::whereYear('created_at', Carbon::now()->year)->whereMonth('created_at', Carbon::now()->month)->count();
 
@@ -79,22 +77,30 @@ class DashboardController extends Controller
             $transaction_amount_percentage = round((($transaction_amount_current_month_sum - $transaction_amount_last_month_sum) / $transaction_amount_last_month_sum * 100), 2);
         }
 
-        return [
-            'user_current_month_count' => $user_current_month_count,
-            'user_last_month_count' => $user_last_month_count,
-            'user_percentage' => $user_percentage,
+        return response()->json([
+            'user' => [
+                'current_month_count' => $user_current_month_count,
+                'last_month_count' => $user_last_month_count,
+                'percentage' => $user_percentage,
+            ],
 
-            'product_current_month_count' => $product_current_month_count,
-            'product_last_month_count' => $product_last_month_count,
-            'product_percentage' => $product_percentage,
+            'product' => [
+                'current_month_count' => $product_current_month_count,
+                'last_month_count' => $product_last_month_count,
+                'percentage' => $product_percentage,
+            ],
 
-            'transaction_current_month_count' => $transaction_current_month_count,
-            'transaction_last_month_count' => $transaction_last_month_count,
-            'transaction_percentage' => $transaction_percentage,
+            'transaction' => [
+                'current_month_count' => $transaction_current_month_count,
+                'last_month_count' => $transaction_last_month_count,
+                'percentage' => $transaction_percentage,
+            ],
 
-            'transaction_amount_current_month_sum' => $transaction_amount_current_month_sum,
-            'transaction_amount_last_month_sum' => $transaction_amount_last_month_sum,
-            'transaction_amount_percentage' => $transaction_amount_percentage,
-        ];
+            'transaction_amount' => [
+                'current_month_sum' => $transaction_amount_current_month_sum,
+                'last_month_sum' => $transaction_amount_last_month_sum,
+                'percentage' => $transaction_amount_percentage,
+            ]
+        ]);
     }
 }

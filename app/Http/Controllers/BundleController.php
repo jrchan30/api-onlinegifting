@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BundleResource;
-use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Models\Bundle;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\BundleResource;
+use App\Models\Category;
+use App\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 class BundleController extends Controller
 {
@@ -37,21 +40,55 @@ class BundleController extends Controller
     {
 
         $validated = $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|string',
+            'colour' => 'required|string',
+            'description' => 'required|string',
             'products' => 'required|array',
+            'products.*' => 'required|numeric',
+            'categories' => 'required|array',
+            'categories.*' => 'required|numeric',
+            'image' => 'required|image',
         ]);
-
-        $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
 
         $id = auth()->user()->id;
 
         $bundle = Bundle::create([
             'user_id' => $id,
             'name' => $validated['name'],
-            // 'price' => $calculatedPrice,
+            'description' => $validated['description'],
         ]);
 
-        $bundle->products()->attach($validated['products']);
+        $detail = $bundle->detail()->create([
+            'colour' => $validated['colour'],
+        ]);
+
+        $file = $validated['image'];
+
+        $upload = $file->store("bundle_images/{$bundle->id}", 's3');
+        Storage::disk('s3')->setVisibility($upload, 'public');
+        $imageModel = new Image([
+            'path' => basename($upload),
+            'url' =>  Storage::url($upload)
+        ]);
+
+        $detail->image()->save($imageModel);
+
+        foreach ($validated['products'] as $productId) {
+            $prod = Product::find($productId);
+            $bundle->products()->attach($prod);
+        }
+
+        foreach ($validated['categories'] as $categoryId) {
+            $cat = Category::find($categoryId);
+            $bundle->detail->categories()->attach($cat);
+        }
+
+
+
+        // $bundle->detail()->categories()->attach($cat);
+        // $bundle->products()->attach($productId);
+        // $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
+        // $bundle->products()->attach($validated['products']);
 
         return new BundleResource($bundle);
     }

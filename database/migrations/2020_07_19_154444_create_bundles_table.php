@@ -17,7 +17,7 @@ class CreateBundlesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            // $table->integer('price');
+            $table->string('description');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

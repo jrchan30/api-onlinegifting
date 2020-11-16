@@ -9,6 +9,6 @@ $factory->define(Bundle::class, function (Faker $faker) {
     return [
         'user_id' => 1,
         'name' => $faker->word . ' Bundle',
-        // 'price' => 0,
+        'description' => $faker->sentence(),
     ];
 });

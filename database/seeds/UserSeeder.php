@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 $box->detail()->save(factory(Detail::class)->make());
                 $box->detail->image()->save(factory(Image::class)->make());
 
-                $box->detail->category()->attach(rand(1, 10));
+                $box->detail->categories()->attach(rand(1, 10));
 
                 $box->products()->attach($products->random(rand(2, 5))->pluck('id')->toArray());
                 $allProducts = $box->products()->get();

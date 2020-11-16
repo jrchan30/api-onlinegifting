@@ -12,7 +12,7 @@ class Bundle extends Model
     protected $table = 'bundles';
 
     protected $fillable = [
-        'user_id', 'name',
+        'user_id', 'name', 'description',
     ];
 
     public function user()

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DetailResource extends JsonResource
+class PaidBoxResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,11 @@ class DetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'colour' => $this->colour,
-            'image' => new ImageResource($this->image),
-            'categories' => CategoryResource::collection($this->categories),
+            'box_id' => $this->box_id,
+            'name' => $this->name,
+            'path' => $this->path,
+            'url' => $this->url,
+            'paid_products' => PaidProductResource::collection($this->paidProducts)
         ];
     }
 }

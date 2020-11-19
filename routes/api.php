@@ -26,10 +26,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('likes', 'LikeController');
     Route::apiResource('discussions', 'DiscussionController');
     Route::apiResource('replies', 'ReplyController');
+    Route::apiResource('transactions', 'TransactionController');
 
     Route::get('/trashed-products', 'ProductController@trashedProducts');
 
     Route::get('/get-widgets', "DashboardController@getWidgets");
+    Route::get('/monthly-sales', "DashboardController@monthlySales");
 });
 
 Route::apiResource('bundles', 'BundleController');

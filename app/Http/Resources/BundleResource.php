@@ -19,7 +19,7 @@ class BundleResource extends JsonResource
             'user' => new UserResource($this->user),
             'description' => $this->description,
             'name' => $this->name,
-            // 'detail' => new DetailResource($this->detail),
+            'detail' => new DetailResource($this->detail),
             'products' => ProductResource::collection($this->products),
             'likes_count' => $this->likes->count(),
             'discussions' => DiscussionResource::collection($this->discussions),

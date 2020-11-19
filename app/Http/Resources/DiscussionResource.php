@@ -21,7 +21,9 @@ class DiscussionResource extends JsonResource
             'user_id' => $this->user_id,
             'user' => new UserResource($this->user),
             'replies' => ReplyResource::collection($this->replies),
-            'created_at' => $this->created_at->diffForHumans()
+            'created_at' => $this->created_at->diffForHumans(),
+            'type' => $this->discussionable_type,
+            'item_name' => $this->discussionable->name
         ];
     }
 }

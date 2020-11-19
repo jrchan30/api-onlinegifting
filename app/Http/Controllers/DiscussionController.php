@@ -39,8 +39,8 @@ class DiscussionController extends Controller
      */
     public function index()
     {
-        $discussions = Discussion::all();
-        return DiscussionResource::collection($discussions);
+        $discussions = Discussion::latest();
+        return DiscussionResource::collection($discussions->paginate(12));
     }
 
     /**

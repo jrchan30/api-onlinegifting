@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -102,5 +103,17 @@ class DashboardController extends Controller
                 'percentage' => $transaction_amount_percentage,
             ]
         ]);
+    }
+
+    public function monthlySales()
+    {
+        $month_sales = DB::table('transactions')->get(['total_price', 'created_at'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('m');
+        });
+        $sums = $month_sales->mapWithKeys(function ($group, $key) {
+            return [$key => $group->sum('total_price')];
+        });
+
+        return $sums;
     }
 }

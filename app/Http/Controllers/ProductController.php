@@ -50,10 +50,14 @@ class ProductController extends Controller
         return ProductResource::collection(Product::latest()->where('price', '<', '2000000')->paginate(10));
     }
 
-    public function trashedProducts()
+    public function trashedProducts(Request $request)
     {
-        $trashed = Product::onlyTrashed()->paginate(12);
-        return ProductResource::collection($trashed);
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $trashed = Product::onlyTrashed()->where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        return ProductResource::collection($trashed->paginate(12));
     }
     /**
      * Store a newly created resource in storage.

@@ -25,15 +25,24 @@ class BundleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return BundleResource::collection(Bundle::latest()->paginate(10));
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $bundles = Bundle::where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        return BundleResource::collection($bundles->paginate(12));
     }
 
-    public function trashedBundles()
+    public function trashedBundles(Request $request)
     {
-        $trashed = Bundle::onlyTrashed()->paginate(12);
-        return BundleResource::collection($trashed);
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $trashed = Bundle::onlyTrashed()->where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        return BundleResource::collection($trashed->paginate(12));
     }
 
     /**

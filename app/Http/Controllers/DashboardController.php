@@ -107,13 +107,45 @@ class DashboardController extends Controller
 
     public function monthlySales()
     {
-        $month_sales = DB::table('transactions')->get(['total_price', 'created_at'])->groupBy(function ($date) {
+        $month_sales = DB::table('transactions')->whereYear('created_at', Carbon::now()->year)->orderBy('created_at', 'asc')->get(['total_price', 'created_at'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('m');
         });
         $sums = $month_sales->mapWithKeys(function ($group, $key) {
             return [$key => $group->sum('total_price')];
-        });
+        })->toArray();
 
-        return $sums;
+        return [
+            'labels' => array_keys($sums),
+            'datasets' => [
+                [
+                    'label' => 'transactions',
+                    'data' => array_values($sums),
+                    'backgroundColor' => "#003f5c",
+                    'borderColor' => "#5e72e4",
+                    'pointBackgroundColor' => "#FFFFFF"
+                ]
+            ]
+        ];
+    }
+
+    public function transactionsCount()
+    {
+        $month_transactions = DB::table('transactions')->whereYear('created_at', Carbon::now()->year)->orderBy('created_at', 'asc')->get(['id', 'created_at'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('m');
+        });
+        $count = $month_transactions->mapWithKeys(function ($group, $key) {
+            return [$key => $group->count('id')];
+        })->toArray();
+
+        return [
+            'labels' => array_keys($count),
+            'datasets' => [
+                [
+                    'label' => 'transactions',
+                    'data' => array_values($count),
+                    'backgroundColor' => "#f87979",
+                ]
+            ]
+        ];
     }
 }

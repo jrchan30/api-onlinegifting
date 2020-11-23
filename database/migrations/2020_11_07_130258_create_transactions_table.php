@@ -26,7 +26,7 @@ class CreateTransactionsTable extends Migration
             $table->string('delivery_courier_service');
             $table->decimal('delivery_fee', 8, 2);
             $table->decimal('total_price', 10, 2);
-            $table->date('arrival_date')->nullable();
+            $table->timestamp('arrival_date')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

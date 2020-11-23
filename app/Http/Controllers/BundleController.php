@@ -30,6 +30,12 @@ class BundleController extends Controller
         return BundleResource::collection(Bundle::latest()->paginate(10));
     }
 
+    public function trashedBundles()
+    {
+        $trashed = Bundle::onlyTrashed()->paginate(12);
+        return BundleResource::collection($trashed);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -114,16 +120,40 @@ class BundleController extends Controller
     public function update(Request $request, Bundle $bundle)
     {
         $validated = $this->validate($request, [
-            'name' => 'sometimes',
-            'products' => 'sometimes|array',
+            'name' => 'required|string',
+            'colour' => 'required|string',
+            'description' => 'required|string',
+            'products' => 'required|array',
+            'products.*' => 'required|numeric',
+            'categories' => 'required|array',
+            'categories.*' => 'required|numeric',
+            'new_image' => 'sometimes|image',
+            'delete_image' => 'sometimes|numeric'
         ]);
 
-        if ($request->has('products')) {
-            // $validated['price'] = Product::whereIn('id', $validated['products'])->sum('price');
-            $bundle->products()->sync($validated['products']);
+        $bundle->update([
+            'name' => $validated['name'],
+            'colour' => $validated['colour'],
+            'description' => $validated['description'],
+        ]);
+
+        $bundle->products()->sync($validated['products']);
+        $bundle->categories()->sync($validated['categories']);
+
+        if ($request->has('new_image')) {
+            $file = $validated['new_image'];
+
+            $upload = $file->store("bundle_images/{$bundle->id}", 's3');
+            Storage::disk('s3')->setVisibility($upload, 'public');
+            $imageModel = new Image([
+                'path' => basename($upload),
+                'url' =>  Storage::url($upload)
+            ]);
+
+            $bundle->detail()->image()->save($imageModel);
+            $bundle->detail()->image()->where('id', $validated['delete_image'])->delete();
         }
 
-        $bundle->update($validated);
         return new BundleResource($bundle);
     }
 
@@ -135,7 +165,21 @@ class BundleController extends Controller
      */
     public function destroy(Bundle $bundle)
     {
-        $bundle->delete();
-        return response('', 204);
+        if (auth()->user()->userDetail->type == 'admin') {
+            $bundle->delete();
+            return response()->json('Successfully Deleted', 204);
+        } else {
+            return response()->json(['error' => 'Forbidden Not Admin'], 403);
+        }
+    }
+
+    public function restoreBundle($id)
+    {
+        if (auth()->user()->userDetail->type == 'admin') {
+            Bundle::withTrashed()->where('id', $id)->restore();
+            return response()->json('Successfully Restored', 204);
+        } else {
+            return response()->json(['error' => 'Forbidden Not Admin'], 403);
+        }
     }
 }

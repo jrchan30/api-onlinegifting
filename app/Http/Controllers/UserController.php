@@ -17,18 +17,34 @@ class UserController extends Controller
         $this->middleware('check.admin', ['except' => ['me', 'update']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
         $users = User::whereHas('userDetail', function ($query) {
-            return $query->where('user_details.type', 'customer');
-        })->latest()->paginate(10);
-        return UserResource::collection($users);
+            return $query->where('type', '!=', 'admin');
+        })->where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        return UserResource::collection($users->paginate(12));
     }
 
     public function me()
     {
         $user = auth()->user();
         return new UserResource($user);
+    }
+
+    public function admins(Request $request)
+    {
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $admins = User::whereHas('userDetail', function ($query) {
+            return $query->where('type', '=', 'admin');
+        })->where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        return UserResource::collection($admins->paginate(12));
     }
 
     public function update(Request $request, $id)

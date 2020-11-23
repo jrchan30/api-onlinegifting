@@ -13,10 +13,17 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::latest()->paginate(12);
-        return TransactionResource::collection($transactions);
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $transactions = Transaction::where('transaction_number', 'LIKE', $search)
+            ->orWhere('receiver_phone_number', 'LIKE', $search)
+            ->orWhere('receiver_full_address', 'LIKE', $search)
+            ->orderBy($orderBy, $orderDir);
+        return TransactionResource::collection($transactions->paginate(12));
     }
 
     /**

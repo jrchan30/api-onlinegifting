@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
     {
         $products = Product::all();
 
-        factory(User::class, 20)->create()->each(function ($user) use ($products) {
+        factory(User::class, 50)->create()->each(function ($user) use ($products) {
             $user->userDetail()->save(factory(UserDetail::class)->make());
             $user->userDetail->image()->save(factory(Image::class)->make());
 

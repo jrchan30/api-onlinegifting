@@ -19,6 +19,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');
     Route::get('/users', 'UserController@index');
     Route::patch('/users/{id}', 'UserController@update');
+    Route::get('/admins', 'UserController@admins');
 
     Route::apiResource('user-details', 'UserDetailController');
     Route::apiResource('carts', 'CartController');
@@ -29,9 +30,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('transactions', 'TransactionController');
 
     Route::get('/trashed-products', 'ProductController@trashedProducts');
+    Route::post('/restore-product/{id}', 'ProductController@restoreProduct');
+
+    Route::get('/trashed-bundles', 'BundleController@trashedBundles');
+    Route::post('/restore-bundle/{id}', 'BundleController@restoreBundle');
 
     Route::get('/get-widgets', "DashboardController@getWidgets");
     Route::get('/monthly-sales', "DashboardController@monthlySales");
+    Route::get('/transactions-count', "DashboardController@transactionsCount");
+
+    Route::post('/admin-search', "AdminSearchController");
+
+    Route::get('/all-products', 'ProductController@allProducts');
 });
 
 Route::apiResource('bundles', 'BundleController');

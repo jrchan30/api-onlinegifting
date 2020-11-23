@@ -26,9 +26,9 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'username' => $this->username,
-            // 'detail' => new UserDetailResource($this->userDetail),
             'detail' => $detail,
-            'type' => $this->userDetail->type ?? 'customer'
+            'type' => $this->userDetail->type ?? 'customer',
+            'created_at' => $this->created_at->diffForHumans(),
         ];
     }
 }

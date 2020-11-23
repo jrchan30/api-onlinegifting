@@ -46,7 +46,8 @@ class TransactionSeeder extends Seeder
             'delivery_courier_service' => $ongkirService->service,
             'delivery_fee' => $ongkirService->fee,
             'total_price' => $ongkirService->totalPrice + $ongkirService->fee,
-            'arrival_date' => null
+            'arrival_date' => null,
+            'created_at' => Carbon::now()->subMonthsNoOverflow(rand(1, 12))
         ]);
 
         return $tx;

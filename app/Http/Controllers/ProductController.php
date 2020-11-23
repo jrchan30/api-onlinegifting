@@ -21,13 +21,23 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest();
+        $s = $request->get('search') ?? '';
+        $orderBy = $request->get('orderBy') ?? 'created_at';
+        $orderDir = $request->get('orderDir') ?? 'desc';
+        $search = '%' . $s . '%';
+        $products = Product::where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
         if (Auth::user()->userDetail->type != 'admin') {
             $products = $products->where('stock', '>', 0);
         }
         return ProductResource::collection($products->paginate(12));
+    }
+
+    public function allProducts()
+    {
+        $products = Product::get(['id', 'name']);
+        return $products;
     }
 
     public function latestProducts()
@@ -145,11 +155,23 @@ class ProductController extends Controller
             }
         }
 
-        $product->categories()->sync($validated['categories']);
-
         if (array_key_exists("delete_image", $validated)) {
-            $product->images()->whereIn('id', $validated['delete_image'])->delete();
+            if ($product->images()->count() > count($validated['delete_image'])) {
+                $product->images()->whereIn('id', $validated['delete_image'])->delete();
+            } else {
+                return response()->json(['message' => 'error, image must be greater or equal to one'], 400);
+            }
         }
+
+
+        $product->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'weight' => $validated['weight'],
+        ]);
+        $product->categories()->sync($validated['categories']);
 
         return new ProductResource($product);
     }
@@ -166,7 +188,17 @@ class ProductController extends Controller
             $product->delete();
             return response()->json('Successfully Deleted', 204);
         } else {
-            return response()->json(['Error' => 'Forbidden Not Admin'], 403);
+            return response()->json(['error' => 'Forbidden Not Admin'], 403);
+        }
+    }
+
+    public function restoreProduct($id)
+    {
+        if (auth()->user()->userDetail->type == 'admin') {
+            Product::withTrashed()->where('id', $id)->restore();
+            return response()->json('Successfully Restored', 204);
+        } else {
+            return response()->json(['error' => 'Forbidden Not Admin'], 403);
         }
     }
 }

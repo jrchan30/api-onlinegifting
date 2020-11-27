@@ -21,7 +21,7 @@ class LikeController extends Controller
     public function index()
     {
         $user = auth()->user()->id;
-        $likes = Like::where('user_id', $user)->with(['likeable', 'user'])->get();
+        $likes = Like::where('user_id', $user)->with(['likeable'])->get();
         return response()->json($likes);
         // $likes = Like::whereHasMorph('likeable', '*', function (Builder $query) {
         //     $query->where('user_id', Auth::user()->id);
@@ -49,11 +49,17 @@ class LikeController extends Controller
             }
 
             $mess = "Liked";
-            $model->likes()->where('user_id', Auth::user()->id)->exists()
-                ? $mess = "Cannot like more than once"
-                : $model->likes()->save($like);
-
-            return response()->json(['success' => $mess], 201);
+            if ($model->likes()->where('user_id', Auth::user()->id)->exists()) {
+                $mess = "Cannot like more than once";
+                return response()->json(['forbidden' => $mess], 403);
+            } else {
+                $like = new Like([
+                    'user_id' => Auth::user()->id
+                ]);
+                $model->likes()->save($like);
+                return response()->json(['success' => $mess], 201);
+            }
+            return '';
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

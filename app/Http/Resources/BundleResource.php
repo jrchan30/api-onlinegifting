@@ -16,7 +16,7 @@ class BundleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
+            // 'user' => new UserResource($this->user),
             'description' => $this->description,
             'name' => $this->name,
             'detail' => new DetailResource($this->detail),

@@ -28,9 +28,16 @@ class ProductController extends Controller
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
         $products = Product::where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
-        if (Auth::user()->userDetail->type != 'admin') {
+        if (Auth::user()) {
+            if (Auth::user()->userDetail->type != 'admin') {
+                $products = $products->where('stock', '>', 0);
+            } else {
+                $products = $products->where('stock', '>=', 0);
+            }
+        } else {
             $products = $products->where('stock', '>', 0);
         }
+
         return ProductResource::collection($products->paginate(12));
     }
 
@@ -42,12 +49,22 @@ class ProductController extends Controller
 
     public function latestProducts()
     {
-        return ProductResource::collection(Product::latest()->take(5)->get());
+
+        if (Auth::user()) {
+            if (Auth::user()->userDetail->type != 'admin') {
+                $products = Product::where('stock', '>', 0);
+            } else {
+                $products = Product::where('stock', '>=', 0);
+            }
+        } else {
+            $products = Product::where('stock', '>', 0);
+        }
+        return ProductResource::collection($products->latest()->take(5)->get());
     }
 
     public function lowPrice()
     {
-        return ProductResource::collection(Product::latest()->where('price', '<', '2000000')->paginate(10));
+        return ProductResource::collection(Product::latest()->where('price', '<', '2000000')->take(12)->get());
     }
 
     public function trashedProducts(Request $request)

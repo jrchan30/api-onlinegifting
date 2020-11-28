@@ -16,14 +16,11 @@ class BoxResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
+            // 'user' => new UserResource($this->user),
             'name' => $this->name,
-            // 'price' => $this->price,
             'detail' => new DetailResource($this->detail),
             'products' => ProductResource::collection($this->products),
-            // 'productsWithTrashed' => ProductResource::collection(
-            //     $this->whenLoaded('products')->withTrashed()->get()
-            // ),
+            'price' => $this->calculatePrice(),
         ];
     }
 }

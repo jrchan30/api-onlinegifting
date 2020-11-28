@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\BoxResource;
 use App\Models\Box;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +18,7 @@ class BoxController extends Controller
      */
     public function index()
     {
-        $box = Box::where('user_id', auth()->user()->id)->with('products')->latest()->paginate(5);
+        $box = Box::where('user_id', auth()->user()->id)->latest()->get();
 
         return BoxResource::collection($box);
     }
@@ -31,19 +32,20 @@ class BoxController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|string',
+            'colour' => 'required',
             'products' => 'sometimes|array',
         ]);
 
+        $user_id = auth()->user()->id;
+        $user = User::find($user_id);
 
-        $user = auth()->user()->id;
-
-        // $calculatedPrice = Product::whereIn('id', $validated['products'])->sum('price');
-
-        $box = Box::create([
-            'user_id' => $user,
+        $box = $user->boxes()->create([
             'name' => $validated['name'],
-            // 'price' => $calculatedPrice,
+        ]);
+
+        $box->detail()->create([
+            'colour' => $validated['colour'],
         ]);
 
         if ($request->has('products')) {

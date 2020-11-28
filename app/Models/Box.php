@@ -40,13 +40,11 @@ class Box extends Model
         return $this->morphMany('App\Models\ProductQuantity', 'product_quantitable');
     }
 
-    // public function calculatePrice()
-    // {
-    //     $calculated = $this->products->sum(function ($products) {
-    //         return $products->price;
-    //     });
-
-    //     $this->price = $calculated;
-    //     $this->save();
-    // }
+    public function calculatePrice()
+    {
+        $calculated = $this->products->sum(function ($products) {
+            return $products->price;
+        });
+        return $calculated;
+    }
 }

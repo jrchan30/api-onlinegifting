@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -14,6 +15,11 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        $isLiked = false;
+        if (auth()->user()) {
+            $isLiked = $this->likes()->where('user_id', auth()->user()->id)->exists();
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,7 +33,8 @@ class ProductResource extends JsonResource
             'reviews' => ReviewResource::collection($this->reviews),
             'weight' => $this->weight,
             'avg_rating' => $this->avgRating(),
-            'deleted_at' => $this->deleted_at
+            'deleted_at' => $this->deleted_at,
+            'isLiked' => $isLiked
         ];
     }
 }

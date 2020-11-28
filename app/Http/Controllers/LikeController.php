@@ -39,9 +39,6 @@ class LikeController extends Controller
     {
         //Keknya masih bisa dibagusin (firstOrCreate)
         try {
-            $like = new Like([
-                'user_id' => Auth::user()->id
-            ]);
             if ($request->input('type') == 'product') {
                 $model = Product::find($request->input('id'));
             } else {
@@ -49,15 +46,18 @@ class LikeController extends Controller
             }
 
             $mess = "Liked";
-            if ($model->likes()->where('user_id', Auth::user()->id)->exists()) {
-                $mess = "Cannot like more than once";
-                return response()->json(['forbidden' => $mess], 403);
+            $like = $model->likes()->where('user_id', Auth::user()->id);
+            if ($like->exists()) {
+                $like->delete();
+                return response()->json([
+                    'message' => 'Successfully unliked', 'status' => 204
+                ], 200);
             } else {
-                $like = new Like([
+                $newLike = new Like([
                     'user_id' => Auth::user()->id
                 ]);
-                $model->likes()->save($like);
-                return response()->json(['success' => $mess], 201);
+                $model->likes()->save($newLike);
+                return response()->json(['success' => $mess, 'status' => 201], 201);
             }
             return '';
         } catch (Exception $e) {

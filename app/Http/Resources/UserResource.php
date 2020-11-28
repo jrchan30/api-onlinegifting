@@ -33,7 +33,6 @@ class UserResource extends JsonResource
                 $liked_bundles = Bundle::whereHas('likes', function ($query) {
                     $query->where('user_id', auth()->user()->id);
                 })->get();
-                // var_dump($liked_bundles);
             }
         }
         return [

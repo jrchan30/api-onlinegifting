@@ -64,7 +64,16 @@ class ProductController extends Controller
 
     public function lowPrice()
     {
-        return ProductResource::collection(Product::latest()->where('price', '<', '2000000')->take(12)->get());
+        if (Auth::user()) {
+            if (Auth::user()->userDetail->type != 'admin') {
+                $products = Product::where('stock', '>', 0);
+            } else {
+                $products = Product::where('stock', '>=', 0);
+            }
+        } else {
+            $products = Product::where('stock', '>', 0);
+        }
+        return ProductResource::collection($products->latest()->where('price', '<', '200000')->take(12)->get());
     }
 
     public function trashedProducts(Request $request)

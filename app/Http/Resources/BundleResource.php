@@ -14,6 +14,11 @@ class BundleResource extends JsonResource
      */
     public function toArray($request)
     {
+        $isLiked = false;
+        if (auth()->user()) {
+            $isLiked = $this->likes()->where('user_id', auth()->user()->id)->exists();
+        }
+
         return [
             'id' => $this->id,
             // 'user' => new UserResource($this->user),
@@ -25,6 +30,7 @@ class BundleResource extends JsonResource
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
             'price' => $this->calculatePrice(),
+            'isLiked' => $isLiked
         ];
     }
 }

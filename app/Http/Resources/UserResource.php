@@ -32,7 +32,7 @@ class UserResource extends JsonResource
 
                 $liked_bundles = Bundle::whereHas('likes', function ($query) {
                     $query->where('user_id', auth()->user()->id);
-                })->get();
+                })->latest()->get();
             }
         }
         return [
@@ -44,8 +44,8 @@ class UserResource extends JsonResource
             'type' => $this->userDetail->type ?? 'customer',
             'created_at' => $this->created_at->diffForHumans(),
             'cart' => $cart,
-            'liked_products' => ProductResource::collection($liked_products),
-            'liked_bundles' => BundleResource::collection($liked_bundles),
+            'liked_products' => $liked_products ? ProductResource::collection($liked_products) : null,
+            'liked_bundles' => $liked_bundles ? BundleResource::collection($liked_bundles) : null,
         ];
     }
 }

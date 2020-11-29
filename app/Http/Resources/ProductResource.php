@@ -16,9 +16,9 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         $isLiked = false;
-        if (auth()->user()) {
-            $isLiked = $this->likes()->where('user_id', auth()->user()->id)->exists();
-        }
+        // if (auth()->user()) {
+        //     $isLiked = $this->likes()->where('user_id', auth()->user()->id)->exists();
+        // }
 
         return [
             'id' => $this->id,

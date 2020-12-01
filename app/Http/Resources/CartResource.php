@@ -20,9 +20,9 @@ class CartResource extends JsonResource
             'total_price' => $this->total_price,
             'receiver_location' => $this->receiver_location,
             'arrival_date' => $this->arrival_date,
-            'user' => new UserResource($this->user),
+            // 'user' => new UserResource($this->user),
             'bundles' => BundleResource::collection($this->bundles),
-            'boxes' => BoxResource::collection($this->boxes()->with('products')),
+            'boxes' => BoxResource::collection($this->boxes),
         ];
     }
 }

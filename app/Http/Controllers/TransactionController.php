@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TransactionResource;
 use App\Models\Paid\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -19,10 +20,24 @@ class TransactionController extends Controller
         $orderBy = $request->get('orderBy') ?? 'created_at';
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
-        $transactions = Transaction::where('transaction_number', 'LIKE', $search)
-            ->orWhere('receiver_phone_number', 'LIKE', $search)
-            ->orWhere('receiver_full_address', 'LIKE', $search)
-            ->orderBy($orderBy, $orderDir);
+
+        $id = auth()->user()->id;
+        $user = User::find($id);
+        // var_dump($user);
+        if (auth()->user()->userDetail->type == 'customer') {
+            $transactions = $user->transactions()->where('transaction_number', 'LIKE', $search)
+                ->where('receiver_phone_number', 'LIKE', $search)
+                ->where('receiver_full_address', 'LIKE', $search)
+                ->orderBy($orderBy, $orderDir);
+        } else {
+            $transactions = Transaction::where('transaction_number', 'LIKE', $search)
+                ->orWhere('receiver_phone_number', 'LIKE', $search)
+                ->orWhere('receiver_full_address', 'LIKE', $search)
+                ->orderBy($orderBy, $orderDir);
+        }
+
+
+
         return TransactionResource::collection($transactions->paginate(12));
     }
 

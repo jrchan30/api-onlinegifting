@@ -38,6 +38,8 @@ class RegisterController extends Controller
             return $response;
         }
 
+        $user->userDetail()->create();
+
         return response()->json(["message" => "Success"], 200);
     }
 

@@ -18,7 +18,7 @@ class CreateUserDetailsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('type')->default('customer');
             $table->string('address')->nullable();
-            $table->string('phone_num');
+            $table->string('phone_num')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

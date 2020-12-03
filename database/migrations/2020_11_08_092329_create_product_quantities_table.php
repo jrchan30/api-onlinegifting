@@ -18,7 +18,7 @@ class CreateProductQuantitiesTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('product_quantitable_id');
             $table->string('product_quantitable_type');
-            $table->integer('quantity');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

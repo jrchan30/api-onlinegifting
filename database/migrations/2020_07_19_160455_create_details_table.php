@@ -15,7 +15,7 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->id();
-            $table->string('colour');
+            $table->string('colour')->default('#336699');
             $table->unsignedBigInteger('detailable_id');
             $table->string('detailable_type');
             $table->timestamps();

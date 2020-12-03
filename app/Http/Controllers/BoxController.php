@@ -33,7 +33,7 @@ class BoxController extends Controller
     {
         $validated = $this->validate($request, [
             'name' => 'required|string',
-            'colour' => 'required',
+            'colour' => 'sometimes|string',
             'products' => 'sometimes|array',
         ]);
 
@@ -44,9 +44,17 @@ class BoxController extends Controller
             'name' => $validated['name'],
         ]);
 
-        $box->detail()->create([
-            'colour' => $validated['colour'],
-        ]);
+
+        if ($request->has('colour')) {
+            $box->detail()->create([
+                'colour' => $validated['colour'],
+            ]);
+        } else {
+            $box->detail()->create();
+        }
+        // $box->detail()->create([
+        //     'colour' => $validated['colour'],
+        // ]);
 
         if ($request->has('products')) {
             $box->products()->attach($validated['products']);
@@ -81,6 +89,7 @@ class BoxController extends Controller
         $validated = $this->validate($request, [
             'name' => 'sometimes',
             'products' => 'sometimes|array',
+            'quantity' => 'sometimes|array'
         ]);
 
         $userId = auth()->user()->id;
@@ -91,8 +100,11 @@ class BoxController extends Controller
         }
 
         if ($request->has('products')) {
-            // $validated['price'] = Product::whereIn('id', $validated['products'])->sum('price');
-            $box->products()->sync($validated['products']);
+            $box->products()->syncWithoutDetaching($validated['products']);
+            $box->productQuantities()->attach([
+                $validated['products'],
+                $validated['quantity']
+            ]);
         }
 
         $box->update($validated);

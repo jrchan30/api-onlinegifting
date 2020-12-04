@@ -101,10 +101,13 @@ class BoxController extends Controller
 
         if ($request->has('products')) {
             $box->products()->syncWithoutDetaching($validated['products']);
-            $box->productQuantities()->attach([
-                $validated['products'],
-                $validated['quantity']
-            ]);
+            // foreach ($validated['products'] as $product) {
+            //     $item = $box->productQuantities()
+            //     $box->productQuantities()->updateOrCreate(
+            //         ['product_id' => $validated['products'],
+            //         ['quantity' => $validated['quantity']]
+            //     );
+            // }
         }
 
         $box->update($validated);

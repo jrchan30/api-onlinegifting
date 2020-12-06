@@ -35,11 +35,6 @@ class Box extends Model
         return $this->morphToMany('App\Models\Product', 'productable')->withPivot('quantity');
     }
 
-    public function productQuantities()
-    {
-        return $this->morphMany('App\Models\ProductQuantity', 'product_quantitable');
-    }
-
     public function calculatePrice()
     {
         $calculated = $this->products->sum(function ($products) {

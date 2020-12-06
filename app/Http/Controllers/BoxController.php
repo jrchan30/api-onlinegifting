@@ -98,15 +98,15 @@ class BoxController extends Controller
             'allProducts' => 'sometimes|json',
         ]);
 
-        $allProducts = json_decode($validated['allProducts']);
+        $allProducts = json_decode($validated['allProducts'], true);
 
         if ($request->has('allProducts')) {
             $box->products()->sync($allProducts);
         }
 
-        $box->name = $validated['name'];
-        $box->detail->colour = $validated['colour'];
-        $box->save();
+        // $box->name = $validated['name'];
+        // $box->detail->colour = $validated['colour'];
+        // $box->save();
         return new BoxResource($box);
     }
 
@@ -121,6 +121,7 @@ class BoxController extends Controller
         $own = $box->user_id == auth()->user()->id;
 
         if ($own) {
+            $box->products()->detach();
             $box->delete();
             return response('', 204);
         } else {

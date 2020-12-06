@@ -86,31 +86,27 @@ class BoxController extends Controller
      */
     public function update(Request $request, Box $box)
     {
-        $validated = $this->validate($request, [
-            'name' => 'sometimes',
-            'products' => 'sometimes|array',
-            'quantity' => 'sometimes|array'
-        ]);
-
         $userId = auth()->user()->id;
-
 
         if ($box->user_id != $userId) {
             return response(['error' => 'Forbidden Not Your Box'], 403);
         }
 
-        if ($request->has('products')) {
-            $box->products()->syncWithoutDetaching($validated['products']);
-            // foreach ($validated['products'] as $product) {
-            //     $item = $box->productQuantities()
-            //     $box->productQuantities()->updateOrCreate(
-            //         ['product_id' => $validated['products'],
-            //         ['quantity' => $validated['quantity']]
-            //     );
-            // }
+        $validated = $this->validate($request, [
+            'name' => 'sometimes',
+            'colour' => 'sometimes',
+            'allProducts' => 'sometimes|json',
+        ]);
+
+        $allProducts = json_decode($validated['allProducts']);
+
+        if ($request->has('allProducts')) {
+            $box->products()->sync($allProducts);
         }
 
-        $box->update($validated);
+        $box->name = $validated['name'];
+        $box->detail->colour = $validated['colour'];
+        $box->save();
         return new BoxResource($box);
     }
 

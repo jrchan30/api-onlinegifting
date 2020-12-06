@@ -54,16 +54,16 @@ class TransactionSeeder extends Seeder
     }
 
     /**
-     * Calculate productquantities rows
+     * Calculate prices rows
      */
     public function calculateWeightPrice($products)
     {
         $totalPrice = 0;
         $totalWeight = 0;
         foreach ($products as $row) {
-            $q = $row->quantity;
-            $price = $row->product->price;
-            $weight = $row->product->weight;
+            $q = $row->pivot->quantity;
+            $price = $row->price;
+            $weight = $row->weight;
             $rowPrice = $q * $price;
             $rowWeight = $q * $weight;
 
@@ -136,15 +136,15 @@ class TransactionSeeder extends Seeder
     {
         foreach ($products as $product) {
             $productImg = $product->images()->first();
-            $quant = $modelToDetach->productQuantities()
-                ->where('product_id', $product->id)
-                ->first();
+            // $quant = $modelToDetach->productQuantities()
+            //     ->where('product_id', $product->id)
+            //     ->first();
 
             $paidModel->paidProducts()->create([
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
-                'quantity' => $quant->quantity,
+                'quantity' => $product->pivot->quantity,
                 'weight' => $product->weight,
                 'path' => $productImg->path,
                 'url' => $productImg->url
@@ -172,7 +172,7 @@ class TransactionSeeder extends Seeder
                 $boxToDetach = $cart->boxes()->first();
 
                 //isi dari model yang mau di bayar
-                $boxProducts = $boxToDetach->productQuantities()->get();
+                $boxProducts = $boxToDetach->products()->get();
 
                 //check ongkir, total berat, total harga tanpa ongkir
                 $ongkirService = $this->ongkirService($boxProducts);
@@ -198,7 +198,7 @@ class TransactionSeeder extends Seeder
                 $merged = $bundlesToDetach->merge($boxesToDetach);
                 $allProductsMerged = new Collection();
                 foreach ($merged as $item) {
-                    $productsRows = $item->productQuantities()->get();
+                    $productsRows = $item->products()->get();
                     $allProductsMerged = $allProductsMerged->merge($productsRows);
                 }
                 $ongkirService = $this->ongkirService($allProductsMerged);

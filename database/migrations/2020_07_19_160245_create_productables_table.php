@@ -18,6 +18,7 @@ class CreateProductablesTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('productable_id');
             $table->string('productable_type');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

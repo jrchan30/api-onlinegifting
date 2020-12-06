@@ -38,13 +38,12 @@ class UserSeeder extends Seeder
                 $box->products()->attach($products->random(rand(2, 5))->pluck('id')->toArray());
                 $allProducts = $box->products()->get();
                 $productsId = $allProducts->pluck('id');
-
                 foreach ($productsId as $id) {
-                    $box->productQuantities()->create([
-                        'product_id' => $id,
-                        'quantity' => random_int(1, 5)
-                    ]);
-                }
+                    $box->products()->updateExistingPivot(
+                        $id,
+                        ['quantity' => random_int(2, 5)]
+                    );
+                };
             }
 
             $user->cart()->save(factory(Cart::class)->make());

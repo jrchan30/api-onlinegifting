@@ -14,12 +14,22 @@ class BoxResource extends JsonResource
      */
     public function toArray($request)
     {
+        $products = [];
+        foreach ($this->products as $product) {
+            array_push($products, array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $product->pivot->quantity,
+                'stock' => $product->stock
+            ));
+        };
         return [
             'id' => $this->id,
             // 'user' => new UserResource($this->user),
             'name' => $this->name,
             'detail' => new DetailResource($this->detail),
-            'products' => ProductResource::collection($this->products),
+            'products' => $products,
             'price' => $this->calculatePrice(),
         ];
     }

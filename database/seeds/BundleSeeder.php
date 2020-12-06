@@ -25,15 +25,15 @@ class BundleSeeder extends Seeder
             $bundle->detail->categories()->attach(rand(1, 10));
 
             $bundle->products()->attach($products->random(rand(2, 5))->pluck('id')->toArray());
-            $allProducts = $bundle->products()->get();
-            $productsId = $allProducts->pluck('id');
+            // $allProducts = $bundle->products()->get();
+            // $productsId = $allProducts->pluck('id');
 
-            foreach ($productsId as $id) {
-                $bundle->productQuantities()->create([
-                    'product_id' => $id,
-                    'quantity' => random_int(1, 5)
-                ]);
-            }
+            // foreach ($productsId as $id) {
+            //     $bundle->productQuantities()->create([
+            //         'product_id' => $id,
+            //         'quantity' => random_int(1, 5)
+            //     ]);
+            // }
         });
     }
 }

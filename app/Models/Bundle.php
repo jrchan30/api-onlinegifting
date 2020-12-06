@@ -32,7 +32,7 @@ class Bundle extends Model
 
     public function products()
     {
-        return $this->morphToMany('App\Models\Product', 'productable');
+        return $this->morphToMany('App\Models\Product', 'productable')->withPivot('quantity');
     }
 
     public function reviews()

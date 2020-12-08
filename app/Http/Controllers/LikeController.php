@@ -8,6 +8,7 @@ use App\Models\Bundle;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\LikeResource;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -20,13 +21,13 @@ class LikeController extends Controller
      */
     public function index()
     {
-        $user = auth()->user()->id;
-        $likes = Like::where('user_id', $user)->with(['likeable'])->get();
-        return response()->json($likes);
-        // $likes = Like::whereHasMorph('likeable', '*', function (Builder $query) {
-        //     $query->where('user_id', Auth::user()->id);
-        // })->get();
-        // return LikeResource::collection($likes);
+        // $user = auth()->user()->id;
+        // $likes = Like::where('user_id', $user)->with(['likeable'])->get();
+        // return response()->json($likes);
+        $liked_products = Product::whereHas('likes', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->latest()->get();
+        return ProductResource::collection($liked_products);
     }
 
     /**

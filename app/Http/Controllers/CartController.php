@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CartResource;
+use App\Http\Resources\UserResource;
+use App\Models\Box;
+use App\Models\Bundle;
 use App\Models\Cart;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -29,15 +35,54 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validate($request, [
-            'delivery_fee' => 'required|numeric',
-            'total_price' => 'required|numeric',
-            'receiver_location' => 'required|numeric',
-            'arrival_date' => 'required|date'
+            'ids' => 'required|array',
+            'type' => 'required|string',
         ]);
 
-        $cart = Cart::create($validated);
+        try {
+            $user_id = auth()->user()->id;
+            $user = User::find($user_id);
 
-        return new CartResource($cart);
+            $cart = $user->cart()->first();
+
+            if ($request->input('type') == 'bundle') {
+                // $model = Bundle::class;
+                $cart->bundles()->sync($validated['ids']);
+            } else if ($request->input('type') == 'box') {
+                // $model = Box::class;
+                foreach ($validated['ids'] as $id) {
+                    $box = Box::find($id);
+                    if ($box->user_id !== $user_id) {
+                        return response()->json(['forbidden' => 'Not your box'], 403);
+                    }
+                }
+                $cart->boxes()->sync($validated['ids']);
+            } else {
+                return response()->json(['error' => 'type not found'], 500);
+            }
+
+            return new CartResource($cart);
+
+
+            // $cart->$model->sync($validated['ids']);
+
+            // $cart = $model->carts()->where('user_id', Auth::user()->id);
+            // if ($like->exists()) {
+            //     $like->delete();
+            //     return response()->json([
+            //         'message' => 'Successfully unliked', 'status' => 204
+            //     ], 200);
+            // } else {
+            //     $newLike = new Like([
+            //         'user_id' => Auth::user()->id
+            //     ]);
+            //     $model->likes()->save($newLike);
+            //     return response()->json(['success' => $mess, 'status' => 201], 201);
+            // }
+            return '';
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**

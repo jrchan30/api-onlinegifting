@@ -16,11 +16,10 @@ class CartResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'delivery_fee' => $this->delivery_fee,
-            'total_price' => $this->total_price,
-            'receiver_location' => $this->receiver_location,
-            'arrival_date' => $this->arrival_date,
-            // 'user' => new UserResource($this->user),
+            // 'delivery_fee' => $this->delivery_fee,
+            // 'total_price' => $this->total_price,
+            // 'receiver_location' => $this->receiver_location,
+            // 'arrival_date' => $this->arrival_date,
             'bundles' => BundleResource::collection($this->bundles),
             'boxes' => BoxResource::collection($this->boxes),
         ];

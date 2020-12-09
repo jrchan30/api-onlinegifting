@@ -39,6 +39,7 @@ class RegisterController extends Controller
         }
 
         $user->userDetail()->create();
+        $user->cart()->create();
 
         return response()->json(["message" => "Success"], 200);
     }

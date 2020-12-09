@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BundleResource;
 use Exception;
 use App\Models\Like;
 use App\Models\Bundle;
@@ -27,7 +28,15 @@ class LikeController extends Controller
         $liked_products = Product::whereHas('likes', function ($query) {
             $query->where('user_id', auth()->user()->id);
         })->latest()->get();
-        return ProductResource::collection($liked_products);
+
+        $liked_bundles = Bundle::whereHas('likes', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->latest()->get();
+
+        return [
+            'liked_products' => ProductResource::collection($liked_products),
+            'liked_bundles' => BundleResource::collection($liked_bundles)
+        ];
     }
 
     /**

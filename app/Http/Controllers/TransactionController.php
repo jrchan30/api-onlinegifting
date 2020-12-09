@@ -36,8 +36,6 @@ class TransactionController extends Controller
                 ->orderBy($orderBy, $orderDir);
         }
 
-
-
         return TransactionResource::collection($transactions->paginate(12));
     }
 
@@ -49,7 +47,16 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $validated = $this->validate($request, [
+        //     'delivery_fee' => 'required|numeric',
+        //     'total_price' => 'required|numeric',
+        //     'receiver_location' => 'required|numeric',
+        //     'arrival_date' => 'required|date'
+        // ]);
+
+        // $transaction = Transaction::create($validated);
+
+        // return new TransactionResource($transaction);
     }
 
     /**

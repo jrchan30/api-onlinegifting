@@ -18,7 +18,7 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $detail = null;
-        $cart = null;
+        // $cart = null;
         // $liked_products = null;
         // $liked_bundles = null;
         if (auth()->user()) {
@@ -43,7 +43,7 @@ class UserResource extends JsonResource
             'detail' => $detail,
             'type' => $this->userDetail->type ?? 'customer',
             'created_at' => $this->created_at->diffForHumans(),
-            'cart' => $cart,
+            // 'cart' => $cart,
             // 'liked_products' => $liked_products ? ProductResource::collection($liked_products) : null,
             // 'liked_bundles' => $liked_bundles ? BundleResource::collection($liked_bundles) : null,
         ];

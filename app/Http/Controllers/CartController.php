@@ -21,7 +21,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cart = Cart::where('user_id', auth()->user()->id)->latest()->paginate(10);
+        $cart = Cart::where('user_id', auth()->user()->id)->latest()->get();
 
         return CartResource::collection($cart);
     }

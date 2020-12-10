@@ -19,20 +19,20 @@ class UserResource extends JsonResource
     {
         $detail = null;
         $cart = null;
-        $liked_products = null;
-        $liked_bundles = null;
+        // $liked_products = null;
+        // $liked_bundles = null;
         if (auth()->user()) {
             if (auth()->user()->id == $this->id) {
                 $detail = new UserDetailResource($this->userDetail);
-                $cart = new CartResource($this->cart);
+                // $cart = new CartResource($this->cart);
 
-                $liked_products = Product::whereHas('likes', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
-                })->latest()->get();
+                // $liked_products = Product::whereHas('likes', function ($query) {
+                //     $query->where('user_id', auth()->user()->id);
+                // })->latest()->get();
 
-                $liked_bundles = Bundle::whereHas('likes', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
-                })->latest()->get();
+                // $liked_bundles = Bundle::whereHas('likes', function ($query) {
+                //     $query->where('user_id', auth()->user()->id);
+                // })->latest()->get();
             }
         }
         return [
@@ -44,8 +44,8 @@ class UserResource extends JsonResource
             'type' => $this->userDetail->type ?? 'customer',
             'created_at' => $this->created_at->diffForHumans(),
             'cart' => $cart,
-            'liked_products' => $liked_products ? ProductResource::collection($liked_products) : null,
-            'liked_bundles' => $liked_bundles ? BundleResource::collection($liked_bundles) : null,
+            // 'liked_products' => $liked_products ? ProductResource::collection($liked_products) : null,
+            // 'liked_bundles' => $liked_bundles ? BundleResource::collection($liked_bundles) : null,
         ];
     }
 }

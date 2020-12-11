@@ -31,6 +31,7 @@ class BoxResource extends JsonResource
             'detail' => new DetailResource($this->detail),
             'products' => $products,
             'price' => $this->calculatePrice(),
+            'type' => 'box',
         ];
     }
 }

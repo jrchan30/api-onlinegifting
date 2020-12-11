@@ -47,7 +47,7 @@ class CartController extends Controller
 
             if ($request->input('type') == 'bundle') {
                 // $model = Bundle::class;
-                $cart->bundles()->sync($validated['ids']);
+                $cart->bundles()->syncWithoutDetaching($validated['ids']);
             } else if ($request->input('type') == 'box') {
                 // $model = Box::class;
                 foreach ($validated['ids'] as $id) {
@@ -56,7 +56,7 @@ class CartController extends Controller
                         return response()->json(['forbidden' => 'Not your box'], 403);
                     }
                 }
-                $cart->boxes()->sync($validated['ids']);
+                $cart->boxes()->syncWithoutDetaching($validated['ids']);
             } else {
                 return response()->json(['error' => 'type not found'], 500);
             }

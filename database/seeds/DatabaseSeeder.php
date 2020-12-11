@@ -31,6 +31,10 @@ class DatabaseSeeder extends Seeder
             'phone_num' => '081514329539,'
         ]);
 
+        DB::table('carts')->insert([
+            'user_id' => 1,
+        ]);
+
         $this->call([
             CategorySeeder::class,
             ProductSeeder::class,

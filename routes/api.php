@@ -15,7 +15,6 @@ Route::post('verification/resend', 'Auth\VerificationController@resend');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::post('checkout', 'MidtransController@getToken');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');
@@ -44,6 +43,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/admin-search', "AdminSearchController");
 
     Route::get('/all-products', 'ProductController@allProducts');
+
+    Route::post('checkout', 'MidtransController@getToken');
 });
 
 Route::apiResource('bundles', 'BundleController');

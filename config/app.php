@@ -15,6 +15,12 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    /**
+     * Custom keys
+     */
+
+    'midtrans_key' => env('MIDTRANS_SERVER_KEY', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

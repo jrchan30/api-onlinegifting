@@ -26,12 +26,12 @@ class BoxResource extends JsonResource
         };
         return [
             'id' => $this->id,
+            'type' => 'box',
+            'price' => $this->calculatePrice(),
             // 'user' => new UserResource($this->user),
             'name' => $this->name,
             'detail' => new DetailResource($this->detail),
             'products' => $products,
-            'price' => $this->calculatePrice(),
-            'type' => 'box',
         ];
     }
 }

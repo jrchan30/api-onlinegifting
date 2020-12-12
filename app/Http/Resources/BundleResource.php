@@ -21,6 +21,8 @@ class BundleResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'type' => 'bundle',
+            'price' => $this->calculatePrice(),
             // 'user' => new UserResource($this->user),
             'description' => $this->description,
             'name' => $this->name,
@@ -29,9 +31,7 @@ class BundleResource extends JsonResource
             'likes_count' => $this->likes->count(),
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
-            'price' => $this->calculatePrice(),
             'isLiked' => $isLiked,
-            'type' => 'bundle',
         ];
     }
 }

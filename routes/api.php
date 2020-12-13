@@ -44,7 +44,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/all-products', 'ProductController@allProducts');
 
-    Route::post('checkout', 'MidtransController@getToken');
+    Route::post('/checkout', 'MidtransController@getToken');
+
+    Route::get('/get-provinces', 'RajaOngkirController@getProvinces');
+    Route::get('/get-cities', 'RajaOngkirController@getCities');
 });
 
 Route::apiResource('bundles', 'BundleController');

@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'type' => 'admin',
             'address' => 'Jln. Pulo Nangka Timur IB',
-            'phone_num' => '081514329539,'
+            'phone_num' => '081514329539'
         ]);
 
         DB::table('carts')->insert([

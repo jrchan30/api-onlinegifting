@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserDetailResource;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserDetailController extends Controller
 {
@@ -15,7 +16,7 @@ class UserDetailController extends Controller
      */
     public function index()
     {
-        //
+        return Auth::user()->userDetail;
     }
 
     /**

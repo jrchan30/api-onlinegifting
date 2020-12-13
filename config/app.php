@@ -20,6 +20,7 @@ return [
      */
 
     'midtrans_key' => env('MIDTRANS_SERVER_KEY', null),
+    'rajaongkir_key' => env('RAJA_ONGKIR_KEY', null),
 
     /*
     |--------------------------------------------------------------------------

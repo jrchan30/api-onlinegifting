@@ -57,4 +57,12 @@ class Bundle extends Model
         });
         return $calculated;
     }
+
+    public function calculateWeight()
+    {
+        $calculated = $this->products->sum(function ($products) {
+            return $products->weight;
+        });
+        return $calculated;
+    }
 }

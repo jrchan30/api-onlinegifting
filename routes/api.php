@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/get-provinces', 'RajaOngkirController@getProvinces');
     Route::get('/get-cities', 'RajaOngkirController@getCities');
+    Route::post('/get-services-costs', 'RajaOngkirController@getServicesCosts');
 });
 
 Route::apiResource('bundles', 'BundleController');

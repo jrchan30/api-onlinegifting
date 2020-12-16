@@ -23,7 +23,7 @@ class BundleResource extends JsonResource
             'id' => $this->id,
             'type' => 'bundle',
             'price' => $this->calculatePrice(),
-            // 'user' => new UserResource($this->user),
+            'weight' => $this->calculateWeight(),
             'description' => $this->description,
             'name' => $this->name,
             'detail' => new DetailResource($this->detail),

@@ -42,4 +42,12 @@ class Box extends Model
         });
         return $calculated;
     }
+
+    public function calculateWeight()
+    {
+        $calculated = $this->products->sum(function ($products) {
+            return $products->weight * $products->pivot->quantity;
+        });
+        return $calculated;
+    }
 }

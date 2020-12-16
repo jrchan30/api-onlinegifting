@@ -16,6 +16,26 @@ class RajaOngkirController extends Controller
         return $response;
     }
 
+    public function getServicesCosts(Request $request)
+    {
+        $destination = $request->input('destination');
+        $weight = $request->input('weight');
+        $courier = $request->input('courier');
+
+        $form = [
+            'origin' => '154',
+            'destination' => $destination,
+            'weight' => $weight,
+            'courier' => $courier,
+        ];
+
+        $response = Http::asForm()->withHeaders([
+            'key' => config('app.rajaongkir_key')
+        ])->post("https://api.rajaongkir.com/starter/cost", $form);
+
+        return $response;
+    }
+
     public function getCities(Request $request)
     {
         $province = $request->get('province') ?? '';

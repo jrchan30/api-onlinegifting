@@ -21,14 +21,15 @@ class BoxResource extends JsonResource
                 'name' => $product->name,
                 'price' => $product->price,
                 'quantity' => $product->pivot->quantity,
-                'stock' => $product->stock
+                'stock' => $product->stock,
+                'weight' => $product->weight
             ));
         };
         return [
             'id' => $this->id,
             'type' => 'box',
             'price' => $this->calculatePrice(),
-            // 'user' => new UserResource($this->user),
+            'weight' => $this->calculateWeight(),
             'name' => $this->name,
             'detail' => new DetailResource($this->detail),
             'products' => $products,

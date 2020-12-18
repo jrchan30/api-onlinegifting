@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BoxResource;
+use App\Http\Resources\BundleResource;
+use App\Models\Box;
+use App\Models\Bundle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +32,26 @@ class MidtransController extends Controller
         //         // 'phone' => Auth::user()->phone,
         //     ),
         // );
+        $bundles_id = $request->input('arrBundles');
+        $boxes_id = $request->input('arrBoxes');
+
+        $bundles = Bundle::whereIn('id', $bundles_id)->get();
+
+        $boxes = Box::whereIn('id', $boxes_id)->get();
+
+        $totalBundleCost = 0;
+        foreach ($bundles as $bundle) {
+            $totalBundleCost += $bundle->calculatePrice();
+        }
+
+        $totalBoxCost = 0;
+        foreach ($boxes as $box) {
+            $totalBoxCost += $box->calculatePrice();
+        }
+
+        $shippingFee = $request->input('shippingFee');
+
+        $grandTotal = $totalBundleCost + $totalBoxCost + ((count($boxes) + count($bundles)) * 10000) + $shippingFee;
 
         $userId = Auth::user()->id;
 
@@ -38,7 +62,7 @@ class MidtransController extends Controller
         $params = array(
             'transaction_details' => array(
                 'order_id' => $orderNumber,
-                'gross_amount' => 10000,
+                'gross_amount' => $grandTotal,
             ),
             'customer_details' => array(
                 'first_name' => Auth::user()->name,

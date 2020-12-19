@@ -15,6 +15,10 @@ Route::post('verification/resend', 'Auth\VerificationController@resend');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
+Route::post('/payments/notification', 'PaymentController@notification');
+Route::get('/payments/completed', 'PaymentController@completed');
+Route::get('/payments/failed', 'PaymentController@failed');
+Route::get('/payments/unfinish', 'PaymentController@unfinish');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');

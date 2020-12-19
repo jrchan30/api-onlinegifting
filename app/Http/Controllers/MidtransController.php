@@ -6,9 +6,11 @@ use App\Http\Resources\BoxResource;
 use App\Http\Resources\BundleResource;
 use App\Models\Box;
 use App\Models\Bundle;
+use App\Models\Paid\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class MidtransController extends Controller
 {
@@ -19,19 +21,6 @@ class MidtransController extends Controller
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
 
-        // $total_price = foreach($request->)
-
-        // $params = array(
-        //     'transaction_details' => array(
-        //         'order_id' => rand(),
-        //         'gross_amount' => $request->get('total_price'),
-        //     ),
-        //     'customer_details' => array(
-        //         'name' => Auth::user()->name,
-        //         'email' => Auth::user()->email,
-        //         // 'phone' => Auth::user()->phone,
-        //     ),
-        // );
         $bundles_id = $request->input('arrBundles');
         $boxes_id = $request->input('arrBoxes');
 
@@ -53,37 +42,43 @@ class MidtransController extends Controller
 
         $grandTotal = $totalBundleCost + $totalBoxCost + ((count($boxes) + count($bundles)) * 10000) + $shippingFee;
 
+        // $userId = Auth::user()->id;
+
+        // $unix = Carbon::now()->timestamp;
+        // $randomStr = rand();
+        // $orderNumber = "ORD/{$unix}/{$userId}/{$randomStr}";
+
+
         $userId = Auth::user()->id;
 
         $unix = Carbon::now()->timestamp;
-        $randomStr = rand();
-        $orderNumber = "ORD/{$unix}/{$userId}/{$randomStr}";
+        $counterTx = Transaction::count() + 1;
+        $randomStr = strtoupper(Str::random(5));
+        $txNumber = "INV/{$unix}/{$userId}/{$counterTx}-{$randomStr}";
+
+        // return $request->input('shipping_address.address');
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => $orderNumber,
+                'order_id' => $txNumber,
                 'gross_amount' => $grandTotal,
             ),
             'customer_details' => array(
                 'first_name' => Auth::user()->name,
                 'email' => Auth::user()->email,
                 'phone' => Auth::user()->userDetail->phone_num,
+                'billing_address' => array(
+                    'address' => Auth::user()->userDetail->address,
+                ),
+                "shipping_address" => array(
+                    'phone' => $request->input('shipping_address.phone'),
+                    'address' => $request->input('shipping_address.address'),
+                    'city' => $request->input('shipping_address.city'),
+                    'postal_code' => $request->input('shipping_address.postal_code'),
+                    'country_code' => 'IDN'
+                )
             ),
         );
-
-        // $params = array(
-        //     'transaction_details' => array(
-        //         'order_id' => rand(),
-        //         'gross_amount' => 10000,
-        //     ),
-        //     'customer_details' => array(
-        //         'first_name' => 'budi',
-        //         'last_name' => 'pratama',
-        //         'email' => 'budi.pra@example.com',
-        //         'phone' => '08111222333',
-        //     ),
-        // );
-
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 

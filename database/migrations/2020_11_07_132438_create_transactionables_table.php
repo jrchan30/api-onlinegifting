@@ -18,6 +18,7 @@ class CreateTransactionablesTable extends Migration
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('transactionable_id');
             $table->string('transactionable_type');
+
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('id')->on('transactions');

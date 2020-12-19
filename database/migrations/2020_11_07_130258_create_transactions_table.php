@@ -16,16 +16,17 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('transaction_number')->nullable();
-            // $table->string('payment_type');
-            $table->string('receiver_phone_number')->nullable();
-            $table->string('receiver_full_address')->nullable();
-            $table->integer('receiver_destination_code')->nullable();
-            $table->integer('total_weight')->nullable();
-            $table->string('delivery_courier_code')->nullable();
-            $table->string('delivery_courier_service')->nullable();
-            $table->decimal('delivery_fee', 8, 2)->nullable();
-            $table->decimal('total_price', 10, 2)->nullable();
+            $table->string('transaction_number')->nullable(); //not null
+            $table->string('receiver_phone_number')->nullable(); //not null
+            $table->string('receiver_full_address')->nullable(); // not null
+            $table->string('receiver_city')->nullable(); // not null
+            $table->string('receiver_postal_code')->nullable(); // not null
+            $table->integer('receiver_destination_code')->nullable(); //not null, not used
+            $table->integer('total_weight')->nullable(); //not null
+            $table->string('delivery_courier_code')->nullable(); //not null
+            $table->string('delivery_courier_service')->nullable(); //not null
+            $table->decimal('delivery_fee', 8, 2)->nullable(); //not null
+            $table->decimal('total_price', 10, 2)->nullable(); //not null
             $table->timestamp('arrival_date')->nullable();
             $table->string('status')->nullable();
 

@@ -63,7 +63,8 @@ class TransactionController extends Controller
             'service' => 'required|string',
             'shippingFee' => 'required|numeric',
             'arrival_date' => 'sometimes',
-            'buyer_phoneNum' => 'required|string'
+            'buyer_phoneNum' => 'required|string',
+            'buyer_address' => 'required|string',
         ]);
 
         $bundles_id = $validated['arrBundles'];
@@ -97,6 +98,35 @@ class TransactionController extends Controller
         $randomStr = strtoupper(Str::random(5));
         $txNumber = "INV/{$unix}/{$userId}/{$counterTx}-{$randomStr}";
 
+        \Midtrans\Config::$serverKey = config('app.midtrans_key');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        $midtransParams = array(
+            'transaction_details' => array(
+                'order_id' => $txNumber,
+                'gross_amount' => $grandTotal,
+            ),
+            'customer_details' => array(
+                'first_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'phone' => $validated['buyer_phoneNum'],
+                'billing_address' => array(
+                    'address' => $validated['buyer_address'],
+                ),
+                "shipping_address" => array(
+                    'phone' => $validated['receiver_phone'],
+                    'address' => $validated['receiver_address'],
+                    'city' => $validated['receiver_city'],
+                    'postal_code' => $validated['receiver_postal_code'],
+                    'country_code' => 'IDN'
+                )
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($midtransParams);
+
         $params = array(
             'transaction_number' => $txNumber,
             'user_id' => $userId,
@@ -112,9 +142,8 @@ class TransactionController extends Controller
             'delivery_courier_code' => $validated['courier'],
             'delivery_courier_service' => $validated['service'],
             'status' => 'unpaid',
+            'token' => $snapToken,
         );
-
-        // return $params;
 
         $transaction = Transaction::create($params);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
 use App\Http\Resources\TransactionResource;
 use App\Models\Box;
 use App\Models\Bundle;
@@ -92,6 +93,7 @@ class TransactionController extends Controller
         $grandTotal = $totalBundleCost + $totalBoxCost + ((count($boxes) + count($bundles)) * 10000) + $shippingFee;
 
         $userId = Auth::user()->id;
+        $user = User::find($userId);
 
         $unix = Carbon::now()->timestamp;
         $counterTx = Transaction::count() + 1;
@@ -141,11 +143,20 @@ class TransactionController extends Controller
             'delivery_fee' => $validated['shippingFee'],
             'delivery_courier_code' => $validated['courier'],
             'delivery_courier_service' => $validated['service'],
-            'status' => 'unpaid',
+            'payment_status' => 'unpaid',
             'token' => $snapToken,
         );
 
         $transaction = Transaction::create($params);
+
+        $cart = $user->cart()->first();
+        if (count($boxes_id) > 0) {
+            $cart->boxes()->wherePivotIn('cartable_id', $boxes_id)->detach();
+        }
+
+        if (count($bundles_id) > 0) {
+            $cart->bundles()->wherePivotIn('cartable_id', $bundles_id)->detach();
+        }
 
         return new TransactionResource($transaction);
     }

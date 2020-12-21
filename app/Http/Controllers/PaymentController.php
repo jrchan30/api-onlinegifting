@@ -27,11 +27,11 @@ class PaymentController extends Controller
         \Midtrans\Config::$is3ds = true;
 
         $paymentNotification = new \Midtrans\Notification();
-        // $transactionDB = Transaction::where('transaction_number', $paymentNotification->order_id)->firstOrFail();
+        $transactionDB = Transaction::where('transaction_number', $paymentNotification->order_id)->firstOrFail();
 
-        // if ($transactionDB->transaction_status == 'settlement' || $transactionDB->transaction_status == 'capture') {
-        //     return response(['message' => 'The order has been paid before'], 422);
-        // }
+        if ($transactionDB->transaction_status == 'settlement' || $transactionDB->transaction_status == 'capture') {
+            return response(['message' => 'The order has been paid before'], 422);
+        }
 
 
         $transaction_mt = $paymentNotification->transaction_status;
@@ -45,6 +45,8 @@ class PaymentController extends Controller
             $vaNumber = $paymentNotification->va_numbers[0]->va_number;
             $vendorName = $paymentNotification->va_numbers[0]->bank;
         }
+
+
 
 
         $paymentStatus = null;
@@ -82,45 +84,21 @@ class PaymentController extends Controller
         $user_id = $arr_ord_id[2];
 
         $transactionParams = [
-            // 'user_id' => Auth::user()->id,
-            // 'order_id' => $transactionDB->id,
-            // // 'number' => Payment::generateCode(),
-            // 'amount' => $paymentNotification->gross_amount,
-            // 'method' => 'midtrans',
-            // 'status' => $paymentStatus,
-            // 'token' => $paymentNotification->transaction_id,
-            // 'payloads' => $payload,
-            // 'payment_type' => $paymentNotification->payment_type,
-            // 'va_number' => $vaNumber,
-            // 'vendor_name' => $vendorName,
-            // 'biller_code' => $paymentNotification->biller_code,
-            // 'bill_key' => $paymentNotification->bill_key,
-
-            'user_id' => $user_id,
-            'order_id' => $paymentNotification->order_id,
-            'transaction_number' => $paymentNotification->transaction_id,
-            // // 'number' => Payment::generateCode(),
-            'total_price' => $paymentNotification->gross_amount,
-            'method' => 'midtrans',
-            'status' => $paymentStatus,
-            'token' => $paymentNotification->transaction_id,
+            'payment_status' => 'paid',
             'payloads' => $payload,
             'payment_type' => $paymentNotification->payment_type,
             'va_number' => $vaNumber,
             'vendor_name' => $vendorName,
-            'biller_code' => $paymentNotification->biller_code,
-            'bill_key' => $paymentNotification->bill_key,
+            'biller_code' => $paymentNotification->biller_code ?? null,
+            'bill_key' => $paymentNotification->bill_key ?? null,
 
-            // 'receiver_phone_number' => '011234556',
-            // 'receiver_full_address' => 'lalalalalala',
-            // 'receiver_destination_code' => '111',
-            // 'total_weight' => 112333,
-            // 'delivery_courier_code' => 'jne',
-            // 'delivery_courier_service' => 'OKE',
-            // 'delivery_fee' => 123111
+            'transaction_status' => $paymentStatus,
+            'transaction_time' => $paymentNotification->transaction_time,
+            'fraud_status' => $paymentNotification->fraud_status
         ];
 
-        $payment = Transaction::create($transactionParams);
+        // $payment = Transaction::create($transactionParams);
+        $transactionDB->update($transactionParams);
 
         // if ($paymentStatus && $payment) {
         //     \DB::transaction(

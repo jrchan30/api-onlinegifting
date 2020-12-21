@@ -23,7 +23,7 @@ class Transaction extends Model
         'delivery_fee',
         'total_price',
         'arrival_date',
-        'status',
+        'payment_status',
         'payment_type',
 
         'token',
@@ -32,7 +32,11 @@ class Transaction extends Model
         'va_number',
         'vendor_name',
         'biller_code',
-        'bill_key'
+        'bill_key',
+
+        'transaction_status',
+        'transaction_time,
+        fraud_status',
     ];
 
     public function user()

@@ -30,7 +30,7 @@ class TransactionResource extends JsonResource
             'delivery_fee' => $this->delivery_fee,
             'total_price' => $this->total_price,
             'arrival_date' => $this->arrival_date,
-            'status' => $this->status,
+            'payment_status' => $this->payment_status,
             'token' => $this->token,
             'payloads' => $this->payloads,
             'payment_type' => $this->payment_type,
@@ -38,9 +38,12 @@ class TransactionResource extends JsonResource
             'vendor_name' => $this->vendor_name,
             'biller_code' => $this->biller_code,
             'bill_key' => $this->bill_key,
-            'created_at' => $this->created_at,
+            'transaction_status' => $this->transaction_status,
+            'transaction_time' => $this->transaction_time,
+            'fraud_status' => $this->fraud_status,
             'paid_boxes' => PaidBoxResource::collection($this->paidBoxes),
             'paid_bundles' => PaidBundleResource::collection($this->paidBundles),
+            'created_at' => $this->created_at->diffForHumans(),
         ];
 
         if (auth()->user()->userDetail->type === 'admin') {

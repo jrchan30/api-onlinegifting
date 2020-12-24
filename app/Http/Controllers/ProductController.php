@@ -27,7 +27,8 @@ class ProductController extends Controller
         $orderBy = $request->get('orderBy') ?? 'created_at';
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
-        $products = Product::where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        //added with count (not yet checked)
+        $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
         if (Auth::user()) {
             if (Auth::user()->userDetail->type != 'admin') {
                 $products = $products->where('stock', '>', 0);

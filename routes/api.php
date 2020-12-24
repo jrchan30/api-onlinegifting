@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/get-services-costs', 'RajaOngkirController@getServicesCosts');
 });
 
+Route::post('/user-search', "UserSearchController");
 Route::apiResource('bundles', 'BundleController');
 Route::apiResource('categories', 'CategoryController');
 Route::apiResource('products', 'ProductController');

@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'images' => ImageResource::collection($this->images),
+            'main_image' => $this->images[0]->url ?? 'not found',
             'categories' => CategoryResource::collection($this->categories),
             'likes_count' => $this->likes->count(),
             'discussions' => DiscussionResource::collection($this->discussions),

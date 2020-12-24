@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductResource;
-use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -27,8 +28,9 @@ class ProductController extends Controller
         $orderBy = $request->get('orderBy') ?? 'created_at';
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
-        //added with count (not yet checked)
+
         $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
+
         if (Auth::user()) {
             if (Auth::user()->userDetail->type != 'admin') {
                 $products = $products->where('stock', '>', 0);
@@ -38,6 +40,7 @@ class ProductController extends Controller
         } else {
             $products = $products->where('stock', '>', 0);
         }
+
 
         return ProductResource::collection($products->paginate(12));
     }

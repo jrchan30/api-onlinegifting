@@ -31,7 +31,9 @@ class BundleController extends Controller
         $orderBy = $request->get('orderBy') ?? 'created_at';
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
-        $bundles = Bundle::where('name', 'LIKE', $search)->orderBy($orderBy, $orderDir);
+        $bundles = Bundle::where('name', 'LIKE', $search)->leftJoin('reviews', function ($join) {
+            $join->on('reviews.reviewable_id', '=', 'bundles.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Bundle');
+        })->select('bundles.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id')->withCount('likes')->orderBy($orderBy, $orderDir);
         return BundleResource::collection($bundles->paginate(12));
     }
 

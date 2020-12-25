@@ -11,6 +11,8 @@ class Product extends Model
 
     protected $table = 'products';
 
+    // protected $appends = ['avg_rate'];
+
     protected $fillable = [
         'name', 'description', 'price', 'stock', 'weight'
     ];

@@ -29,13 +29,16 @@ class ProductResource extends JsonResource
             'images' => ImageResource::collection($this->images),
             'main_image' => $this->images[0]->url ?? 'not found',
             'categories' => CategoryResource::collection($this->categories),
-            'likes_count' => $this->likes->count(),
+            'likes_count' => $this->likes_count ?? $this->likes->count(),
+            'avg_rating' => round($this->avg_rating, 1) ?? round($this->avgRating(), 1) ?? 0,
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
             'weight' => $this->weight,
-            'avg_rating' => $this->avgRating(),
             'deleted_at' => $this->deleted_at,
             'isLiked' => $isLiked
+            // 'avg_rating' => $this->avgRating(),
+            // 'rate_test' => $this->reviews_count,
+            // 'likes_count' => $this->likes->count(),
         ];
     }
 }

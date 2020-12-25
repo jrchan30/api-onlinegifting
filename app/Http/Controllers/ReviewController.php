@@ -33,13 +33,17 @@ class ReviewController extends Controller
     {
         try {
             $validated = $this->validate($request, [
+                'id' => 'required',
+                'type' => 'string|required',
                 'body' => 'string|required',
-                'rating' => 'number|required'
+                'rating' => 'numeric|required|between:1,5'
             ]);
+
 
             $review = new Review([
                 'user_id' => Auth::user()->id,
-                'body' => $validated['body']
+                'body' => $validated['body'],
+                'rating' => $validated['rating']
             ]);
 
             if ($request->input('type') == 'product') {

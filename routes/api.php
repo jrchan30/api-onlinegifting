@@ -20,6 +20,8 @@ Route::get('/payments/completed', 'PaymentController@completed');
 Route::get('/payments/failed', 'PaymentController@failed');
 Route::get('/payments/unfinish', 'PaymentController@unfinish');
 
+Route::get('/reviews', 'ReviewController@index');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');
     Route::get('/users', 'UserController@index');
@@ -32,6 +34,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('likes', 'LikeController');
     Route::apiResource('discussions', 'DiscussionController');
     Route::apiResource('replies', 'ReplyController');
+
+    Route::post('/reviews', 'ReviewController@store');
+
     Route::apiResource('transactions', 'TransactionController');
 
     Route::get('/trashed-products', 'ProductController@trashedProducts');

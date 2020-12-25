@@ -29,7 +29,17 @@ class ProductController extends Controller
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
 
-        $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
+        // DB::enableQueryLog();
+        // $products = Product::where('name', 'LIKE', $search)->withCount(['likes', 'reviews' => function ($query) {
+        //     $query->join('products', 'reviews.reviewable_id', '=', 'products.id')->avg('rating');
+        // }])->orderBy($orderBy, $orderDir);
+        // dd(DB::getQueryLog());
+
+        $products = Product::where('name', 'LIKE', $search)->leftJoin('reviews', function ($join) {
+            $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
+        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id')->withCount('likes')->orderBy($orderBy, $orderDir);
+
+        // $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
 
         if (Auth::user()) {
             if (Auth::user()->userDetail->type != 'admin') {

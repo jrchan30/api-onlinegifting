@@ -35,7 +35,8 @@ class ProductResource extends JsonResource
             'reviews' => ReviewResource::collection($this->reviews),
             'weight' => $this->weight,
             'deleted_at' => $this->deleted_at,
-            'isLiked' => $isLiked
+            'isLiked' => $isLiked,
+            'type' => 'product'
             // 'avg_rating' => $this->avgRating(),
             // 'rate_test' => $this->reviews_count,
             // 'likes_count' => $this->likes->count(),

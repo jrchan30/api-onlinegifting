@@ -35,6 +35,7 @@ class BundleResource extends JsonResource
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
             'isLiked' => $isLiked,
+            'type' => 'bundle'
         ];
     }
 }

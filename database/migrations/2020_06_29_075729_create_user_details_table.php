@@ -17,6 +17,8 @@ class CreateUserDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('type')->default('customer');
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_num')->nullable();
             $table->timestamps();

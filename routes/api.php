@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users', 'UserController@index');
     Route::patch('/users/{id}', 'UserController@update');
     Route::get('/admins', 'UserController@admins');
+    Route::delete('/users/{id}', 'UserController@destroy');
 
     Route::apiResource('user-details', 'UserDetailController');
     Route::apiResource('carts', 'CartController');

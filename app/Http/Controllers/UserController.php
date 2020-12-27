@@ -63,4 +63,17 @@ class UserController extends Controller
             return new UserResource($user);
         }
     }
+
+    public function destroy($id)
+    {
+        $uid = Auth::user()->id;
+        $user = User::find($uid);
+
+        if ($user->id === $id) {
+            $user->delete();
+            return response()->json('Successfully Deleted', 204);
+        } else {
+            return response()->json(['error' => 'Forbidden not yours'], 403);
+        }
+    }
 }

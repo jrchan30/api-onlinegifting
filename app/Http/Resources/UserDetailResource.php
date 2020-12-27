@@ -17,6 +17,8 @@ class UserDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'city' => $this->city,
+            'province' => $this->province,
             'address' => $this->address,
             'phone_num' => $this->phone_num,
             'image' => new ImageResource($this->image),

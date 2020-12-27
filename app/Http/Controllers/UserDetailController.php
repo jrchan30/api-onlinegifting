@@ -16,7 +16,8 @@ class UserDetailController extends Controller
      */
     public function index()
     {
-        return Auth::user()->userDetail;
+        $userDetail = Auth::user()->userDetail;
+        return new UserDetailResource($userDetail);
     }
 
     /**

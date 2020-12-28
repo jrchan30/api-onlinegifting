@@ -38,7 +38,7 @@ class Box extends Model
     public function calculatePrice()
     {
         $calculated = $this->products->sum(function ($products) {
-            return $products->price;
+            return $products->price * $products->pivot->quantity;
         });
         return $calculated;
     }

@@ -55,11 +55,22 @@ class UserController extends Controller
                 'password' => 'sometimes',
                 'name' => 'sometimes|string',
             ]);
+
+            $details = $request->validate([
+                'province' => 'sometimes|string',
+                'city' => 'sometimes|string',
+                'phone_num' => 'sometimes|string',
+                'address' => 'sometimes|string',
+            ]);
+
             if ($request->has('password')) {
                 $data['password'] = bcrypt($data['password']);
             }
+
+            // dd($data);
             $user = User::where('id', auth()->user()->id)->first();
             $user->update($data);
+            $user->userDetail->update($details);
             return new UserResource($user);
         }
     }

@@ -9,7 +9,7 @@ class Category extends Model
     protected $table = 'categories';
 
     protected $fillable = [
-        'name'
+        'name', 'category_id'
     ];
 
     public function categoriable()
@@ -39,6 +39,6 @@ class Category extends Model
 
     public function parentCategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

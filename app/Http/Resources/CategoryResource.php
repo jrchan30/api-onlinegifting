@@ -19,10 +19,21 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        // return [
+        //     'id' => $this->id,
+        //     'name' => $this->name,
+        //     'parent_name' => $this->parentCategory ? $this->parentCategory['name'] : null,
+        //     // 'subCategory' => count($this->allSubCategories) < 1 ? null : CategoryResource::collection($this->allSubCategories),
+        //     'subCategory' => CategoryResource::collection($this->allSubCategories),
+        //     // 'testSub' => $this->with($this->subCategories)->whereNull('category_id'),
+        // ];
+
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'subCategory' => $this->allSubCategories,
+            'label' => $this->name,
+            'children' => count($this->allSubCategories) < 1 ? null : CategoryResource::collection($this->allSubCategories),
+            // 'subCategory' => CategoryResource::collection($this->allSubCategories),
+            // 'testSub' => $this->with($this->subCategories)->whereNull('category_id'),
         ];
     }
 }

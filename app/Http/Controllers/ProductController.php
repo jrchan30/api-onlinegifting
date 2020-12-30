@@ -37,7 +37,7 @@ class ProductController extends Controller
 
         $products = Product::where('name', 'LIKE', $search)->leftJoin('reviews', function ($join) {
             $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
-        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id')->withCount('likes')->orderBy($orderBy, $orderDir);
+        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id', 'name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')->withCount('likes')->orderBy($orderBy, $orderDir);
 
         // $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
 

@@ -1,47 +1,452 @@
 [
     {
         "id": 1,
-        "name": "Boys",
-        "category_id": null
-    },
-    {
-        "id": 2,
-        "name": "Girls",
-        "category_id": null
-    },
-    {
-        "id": 3,
         "name": "Men",
         "category_id": null
     },
     {
-        "id": 4,
+        "id": 2,
         "name": "Women",
         "category_id": null
     },
     {
+        "id": 3,
+        "name": "Boys",
+        "category_id": null
+    },
+    {
+        "id": 4,
+        "name": "Girls",
+        "category_id": null
+    },
+    {
         "id": 5,
-        "name": "Gadgets",
+        "name": "Babies",
         "category_id": null
     },
     {
         "id": 6,
-        "name": "Emoji Lamp",
-        "category_id": 5
+        "name": "Gadgets",
+        "category_id": null
     },
     {
         "id": 7,
-        "name": "Smart Bulb",
-        "category_id": 5
+        "name": "Home Accessories",
+        "category_id": null
     },
     {
         "id": 8,
-        "name": "Accessories",
+        "name": "Sports",
         "category_id": null
     },
     {
         "id": 9,
-        "name": "Casing X12",
-        "category_id": 8
+        "name": "Electronics",
+        "category_id": null
+    },
+    {
+        "id": 10,
+        "name": "Gardening",
+        "category_id": null
+    },
+    {
+        "id": 11,
+        "name": "Fashion",
+        "category_id": 1
+    },
+    {
+        "id": 12,
+        "name": "Backpack",
+        "category_id": 11
+    },
+    {
+        "id": 13,
+        "name": "Shoes",
+        "category_id": 11
+    },
+    {
+        "id": 14,
+        "name": "Shirt",
+        "category_id": 11
+    },
+    {
+        "id": 15,
+        "name": "Belt",
+        "category_id": 11
+    },
+    {
+        "id": 16,
+        "name": "Accessories",
+        "category_id": 1
+    },
+    {
+        "id": 17,
+        "name": "Watch",
+        "category_id": 16
+    },
+    {
+        "id": 18,
+        "name": "Wallet",
+        "category_id": 17
+    },
+    {
+        "id": 19,
+        "name": "Glasses",
+        "category_id": 16
+    },
+    {
+        "id": 20,
+        "name": "Sun Glasses",
+        "category_id": 19
+    },
+    {
+        "id": 21,
+        "name": "Blue Light Glasses",
+        "category_id": 19
+    },
+    {
+        "id": 22,
+        "name": "Other Needs",
+        "category_id": 1
+    },
+    {
+        "id": 23,
+        "name": "Framed Print",
+        "category_id": 22
+    },
+    {
+        "id": 24,
+        "name": "Liquor Decanter Set",
+        "category_id": 22
+    },
+    {
+        "id": 25,
+        "name": "Knife",
+        "category_id": 22
+    },
+    {
+        "id": 26,
+        "name": "Balisong Knife",
+        "category_id": 25
+    },
+    {
+        "id": 27,
+        "name": "Karambit Knife",
+        "category_id": 25
+    },
+    {
+        "id": 28,
+        "name": "Fashion",
+        "category_id": 2
+    },
+    {
+        "id": 29,
+        "name": "Shoes",
+        "category_id": 28
+    },
+    {
+        "id": 30,
+        "name": "Bag",
+        "category_id": 28
+    },
+    {
+        "id": 31,
+        "name": "Hand Bag",
+        "category_id": 30
+    },
+    {
+        "id": 32,
+        "name": "Saddle Bag",
+        "category_id": 30
+    },
+    {
+        "id": 33,
+        "name": "Mini Bag",
+        "category_id": 30
+    },
+    {
+        "id": 34,
+        "name": "Shirt",
+        "category_id": 28
+    },
+    {
+        "id": 35,
+        "name": "Belt",
+        "category_id": 28
+    },
+    {
+        "id": 36,
+        "name": "Accessories",
+        "category_id": 2
+    },
+    {
+        "id": 37,
+        "name": "Watch",
+        "category_id": 36
+    },
+    {
+        "id": 38,
+        "name": "Wallet",
+        "category_id": 36
+    },
+    {
+        "id": 39,
+        "name": "Glasses",
+        "category_id": 36
+    },
+    {
+        "id": 40,
+        "name": "Sun Glasses",
+        "category_id": 39
+    },
+    {
+        "id": 41,
+        "name": "Stylish Glasses",
+        "category_id": 39
+    },
+    {
+        "id": 42,
+        "name": "Reading Glasses",
+        "category_id": 39
+    },
+    {
+        "id": 43,
+        "name": "Jewelry",
+        "category_id": 36
+    },
+    {
+        "id": 44,
+        "name": "Earrings",
+        "category_id": 43
+    },
+    {
+        "id": 45,
+        "name": "Necklace",
+        "category_id": 43
+    },
+    {
+        "id": 46,
+        "name": "Bracelet",
+        "category_id": 43
+    },
+    {
+        "id": 47,
+        "name": "Rings",
+        "category_id": 43
+    },
+    {
+        "id": 48,
+        "name": "Other Needs",
+        "category_id": 2
+    },
+    {
+        "id": 49,
+        "name": "Keychain",
+        "category_id": 48
+    },
+    {
+        "id": 50,
+        "name": "Pillow",
+        "category_id": 48
+    },
+    {
+        "id": 51,
+        "name": "Mug",
+        "category_id": 48
+    },
+    {
+        "id": 52,
+        "name": "Fashion",
+        "category_id": 3
+    },
+    {
+        "id": 53,
+        "name": "Shoes",
+        "category_id": 52
+    },
+    {
+        "id": 54,
+        "name": "Shirt",
+        "category_id": 52
+    },
+    {
+        "id": 55,
+        "name": "Hat",
+        "category_id": 52
+    },
+    {
+        "id": 56,
+        "name": "Educational",
+        "category_id": 3
+    },
+    {
+        "id": 57,
+        "name": "Writing Equipment",
+        "category_id": 56
+    },
+    {
+        "id": 58,
+        "name": "Pencil",
+        "category_id": 57 
+    },
+    {
+        "id": 59,
+        "name": "Pencil Case",
+        "category_id": 57
+    },
+    {
+        "id": 60,
+        "name": "Pen",
+        "category_id": 57
+    },
+    {
+        "id": 61,
+        "name": "Notebook",
+        "category_id": 57 
+    },
+    {
+        "id": 62,
+        "name": "Other Writing Equipment",
+        "category_id": 57
+    },
+    {
+        "id": 63,
+        "name": "School Bag",
+        "category_id": 56 
+    },
+    {
+        "id": 64,
+        "name": "Book",
+        "category_id": 56
+    },
+    {
+        "id": 65,
+        "name": "Storybook",
+        "category_id": 64
+    },
+    {
+        "id": 66,
+        "name": "Knowledge",
+        "category_id": 64
+    },
+    {
+        "id": 67,
+        "name": "Toys",
+        "category_id": 3
+    },
+    {
+        "id": 68,
+        "name": "Robot",
+        "category_id": 67
+    },
+    {
+        "id": 69,
+        "name": "Puzzle",
+        "category_id": 67
+    },
+    {
+        "id": 70,
+        "name": "Toy Car",
+        "category_id": 67
+    },
+    {
+        "id": 71,
+        "name": "Fashion",
+        "category_id": 4
+    },
+    {
+        "id": 72,
+        "name": "Shoe",
+        "category_id": 71
+    },
+    {
+        "id": 73,
+        "name": "Shirt",
+        "category_id": 71
+    },
+    {
+        "id": 74,
+        "name": "Dress",
+        "category_id": 71
+    },
+    {
+        "id": 75,
+        "name": "Educational",
+        "category_id": 4
+    },
+    {
+        "id": 76,
+        "name": "Writing Equipment",
+        "category_id": 75
+    },
+    {
+        "id": 77,
+        "name": "Pencil Case",
+        "category_id": 76
+    },
+    {
+        "id": 78,
+        "name": "Pencil",
+        "category_id": 76
+    },
+    {
+        "id": 79,
+        "name": "Pen",
+        "category_id": 76
+    },
+    {
+        "id": 80,
+        "name": "Notebook",
+        "category_id": 76
+    },
+    {
+        "id": 81,
+        "name": "Other Writing Equipment",
+        "category_id": 75
+    },
+    {
+        "id": 82,
+        "name": "School Bag",
+        "category_id": 75
+    },
+    {
+        "id": 83,
+        "name": "Book",
+        "category_id": 75
+    },
+    {
+        "id": 84,
+        "name": "Storybook",
+        "category_id": 83
+    },
+    {
+        "id": 85,
+        "name": "Knowledge",
+        "category_id": 83
+    },
+    {
+        "id": 86,
+        "name": "Toys",
+        "category_id": 4
+    },
+    {
+        "id": 87,
+        "name": "Doll",
+        "category_id": 86
+    },
+    {
+        "id": 88,
+        "name": "Miscellaneous",
+        "category_id": 86
+    },
+    {
+        "id": 89,
+        "name": "Creativity",
+        "category_id": 86
+    },
+    {
+        "id": 90,
+        "name": "Simulation",
+        "category_id": 86
     }
 ]

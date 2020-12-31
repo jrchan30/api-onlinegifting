@@ -12,7 +12,7 @@ class Box extends Model
     protected $table = 'boxes';
 
     protected $fillable = [
-        'user_id', 'name',
+        'user_id', 'name'
     ];
 
     public function user()

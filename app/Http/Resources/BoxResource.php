@@ -22,7 +22,8 @@ class BoxResource extends JsonResource
                 'price' => $product->price,
                 'quantity' => $product->pivot->quantity,
                 'stock' => $product->stock,
-                'weight' => $product->weight
+                'weight' => $product->weight,
+                'main_image' => $product->images[0]->url ?? 'not found',
             ));
         };
         return [

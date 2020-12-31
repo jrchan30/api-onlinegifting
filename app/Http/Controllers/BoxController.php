@@ -93,16 +93,28 @@ class BoxController extends Controller
         }
 
         $validated = $this->validate($request, [
-            'name' => 'sometimes',
-            'colour' => 'sometimes',
+            'name' => 'sometimes|string',
+            'colour' => 'sometimes|string',
             'allProducts' => 'sometimes|json',
         ]);
+
+        // $validatedProducts = $this->validate($request, [
+        //     'allProducts' => 'sometimes|json'
+        // ]);
 
         $allProducts = json_decode($validated['allProducts'], true);
 
         if ($request->has('allProducts')) {
             $box->products()->sync($allProducts);
         }
+
+        $box->update([
+            'name' => $validated['name']
+        ]);
+
+        $box->detail->update([
+            'colour' => $validated['colour']
+        ]);
 
         // $box->name = $validated['name'];
         // $box->detail->colour = $validated['colour'];

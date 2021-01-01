@@ -17,6 +17,7 @@ class DetailResource extends JsonResource
         return [
             'id' => $this->id,
             'colour' => $this->colour,
+            'design' => $this->design,
             'image' => new ImageResource($this->image),
             'categories' => CategoryResource::collection($this->categories),
         ];

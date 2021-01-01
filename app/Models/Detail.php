@@ -9,7 +9,7 @@ class Detail extends Model
     protected $table = 'details';
 
     protected $fillable = [
-        'colour', 'detailable_id', 'detailable_type',
+        'colour', 'design', 'detailable_id', 'detailable_type',
     ];
 
     public function categories()

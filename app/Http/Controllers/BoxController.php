@@ -35,6 +35,7 @@ class BoxController extends Controller
             'name' => 'required|string',
             'colour' => 'sometimes|string',
             'products' => 'sometimes|array',
+            'design' => 'sometimes|string'
         ]);
 
         $user_id = auth()->user()->id;
@@ -44,14 +45,20 @@ class BoxController extends Controller
             'name' => $validated['name'],
         ]);
 
+        $box->detail()->create();
 
         if ($request->has('colour')) {
-            $box->detail()->create([
+            $box->detail()->update([
                 'colour' => $validated['colour'],
             ]);
-        } else {
-            $box->detail()->create();
         }
+
+        if ($request->has('design')) {
+            $box->detail()->update([
+                'design' => $validated['design'],
+            ]);
+        }
+
         // $box->detail()->create([
         //     'colour' => $validated['colour'],
         // ]);
@@ -95,6 +102,7 @@ class BoxController extends Controller
         $validated = $this->validate($request, [
             'name' => 'sometimes|string',
             'colour' => 'sometimes|string',
+            'design' => 'sometimes|string',
             'allProducts' => 'sometimes|json',
         ]);
 

@@ -110,19 +110,28 @@ class BoxController extends Controller
         //     'allProducts' => 'sometimes|json'
         // ]);
 
-        $allProducts = json_decode($validated['allProducts'], true);
-
         if ($request->has('allProducts')) {
+            $allProducts = json_decode($validated['allProducts'], true);
             $box->products()->sync($allProducts);
         }
 
-        $box->update([
-            'name' => $validated['name']
-        ]);
+        if ($request->has('name')) {
+            $box->update([
+                'name' => $validated['name']
+            ]);
+        }
 
-        $box->detail->update([
-            'colour' => $validated['colour']
-        ]);
+        if ($request->has('colour')) {
+            $box->detail->update([
+                'colour' => $validated['colour']
+            ]);
+        }
+
+        if ($request->has('design')) {
+            $box->detail()->update([
+                'design' => $validated['design'],
+            ]);
+        }
 
         // $box->name = $validated['name'];
         // $box->detail->colour = $validated['colour'];

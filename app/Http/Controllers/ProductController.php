@@ -44,14 +44,16 @@ class ProductController extends Controller
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
         $categories = $request->get('categories') ? explode(',', $request->get('categories')) : 'all';
-        
+        $min = $request->get('min') ?? 0;
+        $max = $request->get('max') ?? 10000000;
         // return $categories;
 
         $products = Product::where('products.name', 'LIKE', $search)->when($categories !== 'all', function($q) use($categories){
             return $q->whereHas('categories', function($q) use ($categories){
                 $q->whereIn('categories.id', $categories);
             });
-        })->leftJoin('reviews', function ($join) {
+        })->whereBetween('price', [$min, $max])
+        ->leftJoin('reviews', function ($join) {
             $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
         })->select('products.*', DB::raw('AVG(rating) as avg_rating'))
                 ->groupBy('id', 'products.name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')

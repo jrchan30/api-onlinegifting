@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\CategoryResource;
 
 class ProductController extends Controller
 {
@@ -24,23 +25,38 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        // $products = Product::where('name', 'LIKE', $search)->leftJoin('reviews', function ($join) {
+        //     $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
+        // })->select('products.*', DB::raw('AVG(rating) as avg_rating'))
+        //         ->groupBy('products.id', 'products.name', 'products.description', 'products.price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')
+        //         ->withCount('likes')->orderBy($orderBy, $orderDir);
+
+        // $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
+        // $products->with(['categories' => function($query) use ($categories){
+            //         return $query->whereIn('categories.id', $categories);
+            // }]);
+            // DB::enableQueryLog();
+        // $products->join('categories')->on('categoriable', 'categoriable_id', '=', 'products.id')->whereIn('categories.id', $categories);
+        // dd(DB::getQueryLog());
+
         $s = $request->get('search') ?? '';
         $orderBy = $request->get('orderBy') ?? 'created_at';
         $orderDir = $request->get('orderDir') ?? 'desc';
         $search = '%' . $s . '%';
+        $categories = $request->get('categories') ? explode(',', $request->get('categories')) : 'all';
+        
+        // return $categories;
 
-        // DB::enableQueryLog();
-        // $products = Product::where('name', 'LIKE', $search)->withCount(['likes', 'reviews' => function ($query) {
-        //     $query->join('products', 'reviews.reviewable_id', '=', 'products.id')->avg('rating');
-        // }])->orderBy($orderBy, $orderDir);
-        // dd(DB::getQueryLog());
-
-        $products = Product::where('name', 'LIKE', $search)->leftJoin('reviews', function ($join) {
+        $products = Product::where('products.name', 'LIKE', $search)->when($categories !== 'all', function($q) use($categories){
+            return $q->whereHas('categories', function($q) use ($categories){
+                $q->whereIn('categories.id', $categories);
+            });
+        })->leftJoin('reviews', function ($join) {
             $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
-        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id', 'name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')->withCount('likes')->orderBy($orderBy, $orderDir);
-
-        // $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
-
+        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))
+                ->groupBy('id', 'products.name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')
+                ->withCount('likes')->orderBy($orderBy, $orderDir);
+        
         if (Auth::user()) {
             if (Auth::user()->userDetail->type != 'admin') {
                 $products = $products->where('stock', '>', 0);
@@ -50,7 +66,6 @@ class ProductController extends Controller
         } else {
             $products = $products->where('stock', '>', 0);
         }
-
 
         return ProductResource::collection($products->paginate(12));
     }

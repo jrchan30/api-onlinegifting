@@ -14,7 +14,14 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        $subCategories = Category::whereNotNull('category_id')->pluck('id')->toArray();
+        $cat = Category::all();
+        $subCategories = [];
+        foreach($cat as $x){
+            if(count($x->allSubCategories) < 1){
+                array_push($subCategories, $x->id);
+            }
+        }
+        // $subCategories = Category::whereNotNull('category_id')->pluck('id')->toArray();
 
         factory(Product::class, 50)->create()->each(function ($product) use ($subCategories) {
             $random = random_int(1, 2);

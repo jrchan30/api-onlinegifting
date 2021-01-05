@@ -1,0 +1,7 @@
+[
+{"id":"1","category_id":"12","categoriable_id":"1","categoriable_type":"App\\Models\\Product","created_at":null,"updated_at":null},
+{"id":"2","category_id":"13","categoriable_id":"2","categoriable_type":"App\\Models\\Product","created_at":null,"updated_at":null},
+{"id":"3","category_id":"14","categoriable_id":"3","categoriable_type":"App\\Models\\Product","created_at":null,"updated_at":null},
+{"id":"4","category_id":"15","categoriable_id":"4","categoriable_type":"App\\Models\\Product","created_at":null,"updated_at":null},
+{"id":"5","category_id":"18","categoriable_id":"5","categoriable_type":"App\\Models\\Product","created_at":null,"updated_at":null}
+]

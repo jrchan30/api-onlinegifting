@@ -33,9 +33,9 @@ class ProductController extends Controller
 
         // $products = Product::where('name', 'LIKE', $search)->withCount('likes')->orderBy($orderBy, $orderDir);
         // $products->with(['categories' => function($query) use ($categories){
-            //         return $query->whereIn('categories.id', $categories);
-            // }]);
-            // DB::enableQueryLog();
+        //         return $query->whereIn('categories.id', $categories);
+        // }]);
+        // DB::enableQueryLog();
         // $products->join('categories')->on('categoriable', 'categoriable_id', '=', 'products.id')->whereIn('categories.id', $categories);
         // dd(DB::getQueryLog());
 
@@ -45,20 +45,21 @@ class ProductController extends Controller
         $search = '%' . $s . '%';
         $categories = $request->get('categories') ? explode(',', $request->get('categories')) : 'all';
         $min = $request->get('min') ?? 0;
+        $min = $request->get('min') == null ? 0 : $request->get('min');
         $max = $request->get('max') ?? 10000000;
         // return $categories;
 
-        $products = Product::where('products.name', 'LIKE', $search)->when($categories !== 'all', function($q) use($categories){
-            return $q->whereHas('categories', function($q) use ($categories){
+        $products = Product::where('products.name', 'LIKE', $search)->when($categories !== 'all', function ($q) use ($categories) {
+            return $q->whereHas('categories', function ($q) use ($categories) {
                 $q->whereIn('categories.id', $categories);
             });
         })->whereBetween('price', [$min, $max])
-        ->leftJoin('reviews', function ($join) {
-            $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
-        })->select('products.*', DB::raw('AVG(rating) as avg_rating'))
-                ->groupBy('id', 'products.name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')
-                ->withCount('likes')->orderBy($orderBy, $orderDir);
-        
+            ->leftJoin('reviews', function ($join) {
+                $join->on('reviews.reviewable_id', '=', 'products.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Product');
+            })->select('products.*', DB::raw('AVG(rating) as avg_rating'))
+            ->groupBy('id', 'products.name', 'description', 'price', 'stock', 'weight', 'created_at', 'deleted_at', 'updated_at')
+            ->withCount('likes')->orderBy($orderBy, $orderDir);
+
         if (Auth::user()) {
             if (Auth::user()->userDetail->type != 'admin') {
                 $products = $products->where('stock', '>', 0);

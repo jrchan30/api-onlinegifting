@@ -38,12 +38,12 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            CategoriableSeeder::class,
+            // CategoriableSeeder::class,
             ProductSeeder::class,
-            ImageSeeder::class,
-            // BundleSeeder::class,
-            // UserSeeder::class,
-            // TransactionSeeder::class
+            // ImageSeeder::class,
+            BundleSeeder::class,
+            UserSeeder::class,
+            TransactionSeeder::class
         ]);
     }
 }

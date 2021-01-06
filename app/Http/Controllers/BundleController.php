@@ -35,13 +35,17 @@ class BundleController extends Controller
         $min = $request->get('min') ?? 0;
         $max = $request->get('max') ?? 10000000;
 
-        $bundles = Bundle::where('name', 'LIKE', $search)->when($categories !== 'all', function ($q) use ($categories) {
-            return $q->has('detail')->whereHas('categories', function ($q) use ($categories) {
-                $q->whereIn('categories.id', $categories);
-            });
-        })->leftJoin('reviews', function ($join) {
-            $join->on('reviews.reviewable_id', '=', 'bundles.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Bundle');
-        })->select('bundles.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id')->withCount('likes')->orderBy($orderBy, $orderDir);
+        $bundles = Bundle::where('name', 'LIKE', $search)
+            ->when($categories !== 'all', function ($q) use ($categories) {
+                return $q->whereHas('detail', function ($query) use ($categories) {
+                    $query->whereHas('categories', function ($q) use ($categories) {
+                        $q->whereIn('categories.id', $categories);
+                    });
+                });
+            })
+            ->leftJoin('reviews', function ($join) {
+                $join->on('reviews.reviewable_id', '=', 'bundles.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Bundle');
+            })->select('bundles.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id')->withCount('likes')->orderBy($orderBy, $orderDir);
         return BundleResource::collection($bundles->paginate(12));
     }
 

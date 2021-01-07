@@ -9,7 +9,7 @@ class PaidBundle extends Model
     protected $table = 'paid_bundles';
 
     protected $fillable = [
-        'user_id', 'name', 'path', 'url'
+        'bundle_id', 'user_id', 'name', 'path', 'url'
     ];
 
     public function transactions()

@@ -151,15 +151,69 @@ class TransactionController extends Controller
 
         $cart = $user->cart()->first();
         if (count($boxes_id) > 0) {
+            foreach ($boxes_id as $box_id) {
+                $boxToDetach = Box::find($box_id);
+
+                $paidBox = $transaction->paidBoxes()->create([
+                    'box_id' => $boxToDetach->id,
+                    'name' => $boxToDetach->name,
+                    'path' => $boxToDetach->detail->image->path ?? '',
+                    'url' => $boxToDetach->detail->image->url ?? '',
+                ]);
+
+                $boxToDetachProducts = $boxToDetach->products()->get();
+
+                foreach ($boxToDetachProducts as $product) {
+                    $productImg = $product->images()->first();
+                    $paidBox->paidProducts()->create([
+                        'name' => $product->name,
+                        'description' => $product->description,
+                        'price' => $product->price,
+                        'quantity' => $product->pivot->quantity,
+                        'weight' => $product->weight,
+                        'path' => $productImg->path,
+                        'url' => $productImg->url
+                    ]);
+                    $product->stock = $product->stock - $product->pivot->quantity;
+                    $product->save();
+                }
+            }
             $cart->boxes()->wherePivotIn('cartable_id', $boxes_id)->detach();
         }
 
         if (count($bundles_id) > 0) {
-            $cart->bundles()->wherePivotIn('cartable_id', $bundles_id)->detach();
-        }
+            foreach ($bundles_id as $bundle_id) {
+                $bundleToDetach = Bundle::find($bundle_id);
 
+                $paidBundle = $transaction->paidBundles()->create([
+                    'bundle_id' => $bundleToDetach->id,
+                    'name' => $bundleToDetach->name,
+                    'path' => $bundleToDetach->detail->image->path,
+                    'url' => $bundleToDetach->detail->image->url,
+                ]);
+
+                $bundleToDetachProducts = $bundleToDetach->products()->get();
+
+                foreach ($bundleToDetachProducts as $product) {
+                    $productImg = $product->images()->first();
+                    $paidBundle->paidProducts()->create([
+                        'name' => $product->name,
+                        'description' => $product->description,
+                        'price' => $product->price,
+                        'quantity' => $product->pivot->quantity,
+                        'weight' => $product->weight,
+                        'path' => $productImg->path,
+                        'url' => $productImg->url
+                    ]);
+                    $product->stock = $product->stock - $product->pivot->quantity;
+                    $product->save();
+                }
+                $cart->bundles()->wherePivotIn('cartable_id', $bundles_id)->detach();
+            }
+        }
         return new TransactionResource($transaction);
     }
+
 
     /**
      * Display the specified resource.

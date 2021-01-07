@@ -9,7 +9,7 @@ class PaidBox extends Model
     protected $table = 'paid_boxes';
 
     protected $fillable = [
-        'user_id', 'name', 'path', 'url'
+        'box_id', 'user_id', 'name', 'path', 'url'
     ];
 
     public function transactions()

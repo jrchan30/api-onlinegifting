@@ -16,7 +16,7 @@ class PaidBundleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'box_id' => $this->box_id,
+            'bundle_id' => $this->bundle_id,
             'name' => $this->name,
             'path' => $this->path,
             'url' => $this->url,

@@ -46,8 +46,7 @@ class PaymentController extends Controller
             $vendorName = $paymentNotification->va_numbers[0]->bank;
         }
 
-
-
+        $customStatus = null;
 
         $paymentStatus = null;
         if ($transaction_mt == 'capture') {
@@ -56,23 +55,29 @@ class PaymentController extends Controller
                 if ($fraud == 'challenge') {
                     // TODO set payment status in merchant's database to 'Challenge by FDS'
                     // TODO merchant should decide whether this transaction is authorized or not in MAP
+                    $customStatus = 'waiting for approval';
                     $paymentStatus = 'challenge';
                 } else {
                     // TODO set payment status in merchant's database to 'Success'
+                    $customStatus = 'paid';
                     $paymentStatus = 'success';
                 }
             }
         } else if ($transaction_mt == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
+            $customStatus = 'paid';
             $paymentStatus = 'settlement';
         } else if ($transaction_mt == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
+            $customStatus = 'unpaid';
             $paymentStatus = 'pending';
         } else if ($transaction_mt == 'deny') {
             // TODO set payment status in merchant's database to 'Denied'
+            $customStatus = 'unpaid';
             $paymentStatus = 'deny';
         } else if ($transaction_mt == 'expire') {
             // TODO set payment status in merchant's database to 'expire'
+            $customStatus = 'unpaid';
             $paymentStatus = 'expire';
         } else if ($transaction_mt == 'cancel') {
             // TODO set payment status in merchant's database to 'Denied'
@@ -84,7 +89,7 @@ class PaymentController extends Controller
         $user_id = $arr_ord_id[2];
 
         $transactionParams = [
-            'payment_status' => 'paid',
+            'payment_status' => $customStatus,
             'payloads' => $payload,
             'payment_type' => $paymentNotification->payment_type,
             'va_number' => $vaNumber,

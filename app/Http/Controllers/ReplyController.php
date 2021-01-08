@@ -40,8 +40,9 @@ class ReplyController extends Controller
                 'body' => $validated['body']
             ]);
             $discussion = Discussion::findOrFail($request->input('discussion_id'));
-            $discussion->replies()->save($reply);
-            return response()->json(['success' => 'Reply posted'], 201);
+            $res = $discussion->replies()->save($reply);
+            // return response()->json(['success' => 'Reply posted'], 201);
+            return new ReplyResource($res);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

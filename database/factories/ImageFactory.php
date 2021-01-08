@@ -9,10 +9,10 @@ $factory->define(Image::class, function (Faker $faker) {
 
     $baseUrl = "https://picsum.photos/";
     $id = random_int(1, 100);
-    $url = "id/" . $id . "/1280/720/";
+    // $url = "id/" . $id . "/1280/720/";
+    $url = "id/" . $id . "/1000/1000/";
 
     return [
-
         'path' => $url,
         'url' => $baseUrl . $url,
     ];

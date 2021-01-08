@@ -39,12 +39,12 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->morphMany('App\Models\Review', 'reviewable');
+        return $this->morphMany('App\Models\Review', 'reviewable')->latest();
     }
 
     public function discussions()
     {
-        return $this->morphMany('App\Models\Discussion', 'discussionable');
+        return $this->morphMany('App\Models\Discussion', 'discussionable')->latest();
     }
 
     public function likes()

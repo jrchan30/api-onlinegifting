@@ -66,8 +66,9 @@ class DiscussionController extends Controller
             } else {
                 $model = Bundle::findOrFail($request->input('id'));
             }
-            $model->discussions()->save($discussion);
-            return response()->json(['success' => 'Discussion posted'], 201);
+            $res = $model->discussions()->save($discussion);
+            // return response()->json(['success' => 'Discussion posted'], 201);
+            return new DiscussionResource($res);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

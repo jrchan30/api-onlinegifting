@@ -14,6 +14,7 @@ class CategoriableSeeder extends Seeder
     public function run()
     {
         $json = File::get("database/seeds/data/categoriables.json");
+        // test
         $data = json_decode($json);
         foreach ($data as $obj) {
             Categoriable::create([

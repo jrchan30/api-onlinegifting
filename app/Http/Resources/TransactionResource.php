@@ -30,6 +30,7 @@ class TransactionResource extends JsonResource
             'delivery_fee' => $this->delivery_fee,
             'total_price' => $this->total_price,
             'arrival_date' => $this->arrival_date,
+            'is_arrived' => $this->is_arrived,
             'payment_status' => $this->payment_status,
             'token' => $this->token,
             'payloads' => $this->payloads,

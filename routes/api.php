@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/reviews', 'ReviewController@store');
 
     Route::apiResource('transactions', 'TransactionController');
+    Route::post('/arrive', 'TransactionController@arrive');
 
     Route::get('/trashed-products', 'ProductController@trashedProducts');
     Route::post('/restore-product/{id}', 'ProductController@restoreProduct');

@@ -214,6 +214,22 @@ class TransactionController extends Controller
         return new TransactionResource($transaction);
     }
 
+    public function arrive(Request $request)
+    {
+        $validated = $this->validate($request, [
+            'transaction_id' => 'required',
+        ]);
+
+        $transaction = Transaction::find($validated['transaction_id']);
+
+        if (Auth::user()->id == $transaction->user_id) {
+            $transaction->update(['is_arrived' => Carbon::now()->toDateTimeString()]);
+            return new TransactionResource($transaction);
+        } else {
+            return response()->json(['Forbidden' => 'not your transaction'], 403);
+        }
+    }
+
 
     /**
      * Display the specified resource.

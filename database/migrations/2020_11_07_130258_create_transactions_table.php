@@ -28,6 +28,7 @@ class CreateTransactionsTable extends Migration
             $table->decimal('delivery_fee', 8, 2)->nullable(); //not null, udah
             $table->decimal('total_price', 10, 2)->nullable(); //not null, udah
             $table->timestamp('arrival_date')->nullable(); //udah
+            $table->timestamp('is_arrived')->nullable();
             $table->string('payment_status')->nullable(); //change paid unpaid
 
             $table->string('token')->nullable(); //not null, udah

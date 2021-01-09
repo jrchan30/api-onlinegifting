@@ -23,6 +23,7 @@ class Transaction extends Model
         'delivery_fee',
         'total_price',
         'arrival_date',
+        'is_arrived',
         'payment_status',
         'payment_type',
 

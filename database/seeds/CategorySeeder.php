@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
         // factory(Category::class, 10)->create();
-        $json = File::get("database/seeds/data/category.json");
+        $json = File::get("database/seeds/data/categories.json");
         $data = json_decode($json);
         foreach ($data as $obj) {
             Category::create([

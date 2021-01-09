@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             ImageSeeder::class,
             // BundleSeeder::class,
-            UserSeeder::class,
+            // UserSeeder::class,
             // TransactionSeeder::class
         ]);
     }

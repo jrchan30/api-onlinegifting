@@ -2,6 +2,7 @@
 
 namespace App\Models\Paid;
 
+use App\Models\Box;
 use Illuminate\Database\Eloquent\Model;
 
 class PaidBox extends Model
@@ -9,7 +10,7 @@ class PaidBox extends Model
     protected $table = 'paid_boxes';
 
     protected $fillable = [
-        'box_id', 'user_id', 'name', 'path', 'url'
+        'box_id', 'name', 'path', 'url'
     ];
 
     public function transactions()
@@ -20,5 +21,10 @@ class PaidBox extends Model
     public function paidProducts()
     {
         return $this->morphMany('App\Models\Paid\PaidProduct', 'paid_productable');
+    }
+
+    public function box()
+    {
+        return $this->belongsTo(Box::class);
     }
 }

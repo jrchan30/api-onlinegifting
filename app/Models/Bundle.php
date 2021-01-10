@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Paid\PaidBundle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -48,6 +49,11 @@ class Bundle extends Model
     public function likes()
     {
         return $this->morphMany('App\Models\Like', 'likeable');
+    }
+
+    public function paidBundles()
+    {
+        return $this->hasMany(PaidBundle::class);
     }
 
     public function calculatePrice()

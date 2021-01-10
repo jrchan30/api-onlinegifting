@@ -15,6 +15,7 @@ class CreatePaidProductsTable extends Migration
     {
         Schema::create('paid_products', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_id');
             $table->string('name');
             $table->string('description');
             $table->integer('price');
@@ -25,6 +26,8 @@ class CreatePaidProductsTable extends Migration
             $table->unsignedBigInteger('paid_productable_id');
             $table->string('paid_productable_type');
             $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

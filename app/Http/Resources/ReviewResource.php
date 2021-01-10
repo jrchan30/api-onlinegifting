@@ -19,6 +19,8 @@ class ReviewResource extends JsonResource
             'body' => $this->body,
             'rating' => $this->rating,
             'user_id' => $this->user_id,
+            'paid_product_id' => $this->paid_product_id,
+            'paid_bundle_id' => $this->paid_bundle_id,
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at->diffForHumans(),
             'type' => $this->reviewable_type,

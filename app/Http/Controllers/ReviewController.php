@@ -36,15 +36,31 @@ class ReviewController extends Controller
                 'id' => 'required',
                 'type' => 'string|required',
                 'body' => 'string|required',
+                'paid_product_id' => 'sometimes',
+                'paid_bundle_id' => 'sometimes',
                 'rating' => 'numeric|required|between:1,5'
             ]);
 
 
-            $review = new Review([
+            $review = Review::firstOrNew([
                 'user_id' => Auth::user()->id,
+                'paid_product_id' => $request->paid_product_id ? $validated['paid_product_id'] : null,
+                'paid_bundle_id' => $request->paid_bundle_id ? $validated['paid_bundle_id'] : null,
+
+            ], [
                 'body' => $validated['body'],
-                'rating' => $validated['rating']
+                'rating' => $validated['rating'],
             ]);
+
+            // if ($request->paid_product_id) {
+            //     $review->paid_product_id = $validated['paid_product_id'];
+            // }
+
+            // if ($request->paid_bundle_id) {
+            //     $review->paid_bundle_id = $validated['paid_bundle_id'];
+            // }
+
+            // $review->save();
 
             if ($request->input('type') == 'product') {
                 $model = Product::findOrFail($request->input('id'));
@@ -53,7 +69,7 @@ class ReviewController extends Controller
             }
             $res = $model->reviews()->save($review);
             // return response()->json(['success' => 'Review posted'], 201);
-            return new ReviewResource($res);
+            return new ReviewResource($review);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

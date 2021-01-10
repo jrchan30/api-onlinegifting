@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Paid\PaidBox;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,6 +34,11 @@ class Box extends Model
     public function products()
     {
         return $this->morphToMany('App\Models\Product', 'productable')->withPivot('quantity');
+    }
+
+    public function paidBoxes()
+    {
+        return $this->hasMany(PaidBox::class);
     }
 
     public function calculatePrice()

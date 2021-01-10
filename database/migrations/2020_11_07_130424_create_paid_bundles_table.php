@@ -20,6 +20,8 @@ class CreatePaidBundlesTable extends Migration
             $table->string('path');
             $table->string('url');
             $table->timestamps();
+
+            $table->foreign('bundle_id')->references('id')->on('bundles');
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Paid\PaidProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,6 +51,11 @@ class Product extends Model
     public function likes()
     {
         return $this->morphMany('App\Models\Like', 'likeable');
+    }
+
+    public function paidProducts()
+    {
+        return $this->hasMany(PaidProduct::class);
     }
 
     public function avgRating()

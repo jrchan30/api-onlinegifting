@@ -20,6 +20,8 @@ class CreatePaidBoxesTable extends Migration
             $table->string('path');
             $table->string('url');
             $table->timestamps();
+
+            $table->foreign('box_id')->references('id')->on('boxes');
         });
     }
 

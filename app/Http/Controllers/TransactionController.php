@@ -166,6 +166,7 @@ class TransactionController extends Controller
                 foreach ($boxToDetachProducts as $product) {
                     $productImg = $product->images()->first();
                     $paidBox->paidProducts()->create([
+                        'product_id' => $product->id,
                         'name' => $product->name,
                         'description' => $product->description,
                         'price' => $product->price,
@@ -197,6 +198,7 @@ class TransactionController extends Controller
                 foreach ($bundleToDetachProducts as $product) {
                     $productImg = $product->images()->first();
                     $paidBundle->paidProducts()->create([
+                        'product_id' => $product->id,
                         'name' => $product->name,
                         'description' => $product->description,
                         'price' => $product->price,

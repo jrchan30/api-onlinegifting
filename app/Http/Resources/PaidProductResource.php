@@ -16,6 +16,7 @@ class PaidProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'product_id' => $this->product_id,
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
@@ -23,6 +24,8 @@ class PaidProductResource extends JsonResource
             'weight' => $this->weight,
             'path' => $this->path,
             'url' => $this->url,
+            'review' => $this->product->reviews->where('paid_product_id', $this->id),
+            'type' => 'product',
         ];
     }
 }

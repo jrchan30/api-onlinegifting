@@ -67,7 +67,7 @@ class ReviewController extends Controller
             } else {
                 $model = Bundle::findOrFail($request->input('id'));
             }
-            $res = $model->reviews()->save($review);
+            $model->reviews()->save($review);
             // return response()->json(['success' => 'Review posted'], 201);
             return new ReviewResource($review);
         } catch (Exception $e) {

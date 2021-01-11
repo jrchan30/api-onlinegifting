@@ -71,4 +71,16 @@ class Bundle extends Model
         });
         return $calculated;
     }
+
+    public function avgRating()
+    {
+        $reviews = $this->reviews;
+        $count = $reviews->count();
+
+        $totalRate = $reviews->sum(function ($x) {
+            return $x->rating;
+        });
+
+        return $count > 0 ? $totalRate / $count : null;
+    }
 }

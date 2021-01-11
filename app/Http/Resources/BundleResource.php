@@ -31,11 +31,11 @@ class BundleResource extends JsonResource
             'products' => ProductResource::collection($this->products),
             // 'likes_count' => $this->likes->count(),
             'likes_count' => $this->likes_count ?? $this->likes->count(),
-            'avg_rating' => round($this->avg_rating, 1) ?? round($this->avgRating(), 1) ?? 0,
+            'avg_rating' => $this->avg_rating ?? $this->avgRating(),
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
             'isLiked' => $isLiked,
-            'type' => 'bundle'
+            'type' => 'bundle',
         ];
     }
 }

@@ -20,7 +20,7 @@ class PaidBundleResource extends JsonResource
             'name' => $this->name,
             'path' => $this->path,
             'url' => $this->url,
-            'review' => $this->bundle->reviews->where('paid_bundle_id', $this->id) ?? null,
+            'review' => $this->bundle->reviews->where('paid_bundle_id', $this->id),
             'paid_products' => PaidProductResource::collection($this->paidProducts),
             'type' => 'bundle',
         ];

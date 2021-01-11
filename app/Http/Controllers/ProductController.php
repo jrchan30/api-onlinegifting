@@ -91,6 +91,7 @@ class ProductController extends Controller
         } else {
             $products = Product::where('stock', '>', 0);
         }
+
         return ProductResource::collection($products->latest()->take(5)->get());
     }
 

@@ -77,6 +77,7 @@ class BundleController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'required|numeric',
             'image' => 'required|image',
+            'design' => 'required|string'
         ]);
 
         $id = auth()->user()->id;
@@ -89,6 +90,7 @@ class BundleController extends Controller
 
         $detail = $bundle->detail()->create([
             'colour' => $validated['colour'],
+            'design' => $validated['design'],
         ]);
 
         $file = $validated['image'];
@@ -151,17 +153,22 @@ class BundleController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'required|numeric',
             'new_image' => 'sometimes|image',
-            'delete_image' => 'sometimes|numeric'
+            'delete_image' => 'sometimes|numeric',
+            'design' => 'required|string',
         ]);
 
         $bundle->update([
             'name' => $validated['name'],
-            'colour' => $validated['colour'],
             'description' => $validated['description'],
         ]);
 
+        $bundle->detail()->update([
+            'colour' => $validated['colour'],
+            'design' => $validated['design'],
+        ]);
+
         $bundle->products()->sync($validated['products']);
-        $bundle->categories()->sync($validated['categories']);
+        $bundle->detail->categories()->sync($validated['categories']);
 
         if ($request->has('new_image')) {
             $file = $validated['new_image'];

@@ -21,9 +21,10 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cart = Cart::where('user_id', auth()->user()->id)->latest()->get();
+        $cart = Cart::where('user_id', auth()->user()->id)->first();
 
-        return CartResource::collection($cart);
+        // return CartResource::collection($cart);
+        return new CartResource($cart);
     }
 
     /**
@@ -109,7 +110,24 @@ class CartController extends Controller
      */
     public function update(Request $request, Cart $cart)
     {
-        //
+        $validated = $this->validate($request, [
+            'arrBoxToRemove' => 'sometimes|array',
+            'arrBundleToRemove' => 'sometimes|array',
+        ]);
+
+        if ($cart->user_id == auth()->user()->id) {
+            if ($request->has('arrBoxToRemove')) {
+                $cart->boxes()->detach($validated['arrBoxToRemove']);
+            }
+
+            if ($request->has('arrBundleToRemove')) {
+                $cart->bundles()->detach($validated['arrBundleToRemove']);
+            }
+
+            return new CartResource($cart);
+        } else {
+            return response()->json(['Error' => 'Forbidden Not Your Cart'], 403);
+        }
     }
 
     /**

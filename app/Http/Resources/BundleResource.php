@@ -31,7 +31,7 @@ class BundleResource extends JsonResource
             'products' => ProductResource::collection($this->products),
             // 'likes_count' => $this->likes->count(),
             'likes_count' => $this->likes_count ?? $this->likes->count(),
-            'avg_rating' => $this->avg_rating ?? $this->avgRating(),
+            'avg_rating' => $this->avg_rating ?? $this->avgRating() ?? 0,
             'discussions' => DiscussionResource::collection($this->discussions),
             'reviews' => ReviewResource::collection($this->reviews),
             'isLiked' => $isLiked,

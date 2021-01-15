@@ -19,7 +19,7 @@ class PaymentController extends Controller
         // return $validSignatureKey;
 
         if ($notification->signature_key != $validSignatureKey) {
-            return response(['message' => 'Invalid signature'], 402);
+            return response(['message' => 'Invalid signature'], 403);
         }
 
         // $this->initPaymentGateway();

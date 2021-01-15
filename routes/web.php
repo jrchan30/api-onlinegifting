@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Events\WebsocketDemoEvent;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +17,8 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
+
+// Route::get('/', function () {
+//     broadcast(new WebsocketDemoEvent("some data"));
+//     return view('welcome');
+// });

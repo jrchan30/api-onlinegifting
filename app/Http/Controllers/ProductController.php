@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WebsocketDemoEvent;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Category;
@@ -69,7 +70,6 @@ class ProductController extends Controller
         } else {
             $products = $products->where('stock', '>', 0);
         }
-
         return ProductResource::collection($products->paginate(12));
     }
 

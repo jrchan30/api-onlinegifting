@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WebsocketDemoEvent;
 use App\Http\Resources\UserDetailResource;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class UserDetailController extends Controller
     public function index()
     {
         $userDetail = Auth::user()->userDetail;
+
         return new UserDetailResource($userDetail);
     }
 
@@ -52,7 +54,6 @@ class UserDetailController extends Controller
     public function show(UserDetail $userDetail)
     {
         $user = auth('sanctum')->user();
-
         if ($userDetail->user_id == $user->id) {
             return new UserDetailResource($userDetail);
         }

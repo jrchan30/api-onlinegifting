@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\WebsocketDemoEvent;
 use Illuminate\Support\Facades\Broadcast;
 
 /*

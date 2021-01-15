@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WebsocketDemoEvent;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class UserController extends Controller
     public function me()
     {
         $user = auth()->user();
+        WebsocketDemoEvent::dispatch("test123");
         return new UserResource($user);
     }
 

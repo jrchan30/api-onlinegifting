@@ -49747,8 +49747,15 @@ axios.defaults.withCredentials = true;
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
+//     // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     wsHost: window.location.hostname,
+//     wsPort: 6001,
+//     forceTLS: false,
+//     disableStats: true,
+// });
+// window.Echo.channel('DemoChannel').listen('WebsocketDemoEvent', (e) => {
+//     console.log(e);
+//     console.log('hello')
 // });
 
 /***/ }),
@@ -49840,8 +49847,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Russell Chan\Desktop\online-gifting\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Russell Chan\Desktop\online-gifting\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\russellchan\Desktop\online-gifting\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\russellchan\Desktop\online-gifting\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

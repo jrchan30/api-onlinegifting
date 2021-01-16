@@ -1,0 +1,10 @@
+[
+{"id":"1","user_id":"1","name":"Travelling Bundle","description":"<p>To make sure you travel well.<\/p>","created_at":"2021-01-14 06:00:32","updated_at":"2021-01-14 06:00:32","deleted_at":null},
+{"id":"2","user_id":"1","name":"Babies in Style","description":"<p>Making babies with this baby-friendly bundle.<\/p>","created_at":"2021-01-15 16:47:02","updated_at":"2021-01-15 16:47:02","deleted_at":null},
+{"id":"3","user_id":"1","name":"Netflix and Chill","description":"<p>Making your netflix and chill complete with wine decanter set, great Sony sound bar, in a Zelda robe.<\/p>","created_at":"2021-01-15 16:51:46","updated_at":"2021-01-15 16:51:46","deleted_at":null},
+{"id":"4","user_id":"1","name":"Future House","description":"<p>Adding a little bit of futuristic taste to your house.<\/p>","created_at":"2021-01-15 16:58:03","updated_at":"2021-01-15 16:58:03","deleted_at":null},
+{"id":"5","user_id":"1","name":"Women in Style","description":"<p>For her.<\/p>","created_at":"2021-01-15 17:06:03","updated_at":"2021-01-15 17:06:03","deleted_at":null},
+{"id":"6","user_id":"1","name":"Make Santa Happy Bundle","description":"<p>This bundle surely put a smile on Santa's face.<\/p>","created_at":"2021-01-15 17:08:58","updated_at":"2021-01-15 17:08:58","deleted_at":null},
+{"id":"7","user_id":"1","name":"Men in Style","description":"<p>When he needs a little touch to his style.<\/p>","created_at":"2021-01-16 05:07:13","updated_at":"2021-01-16 05:07:13","deleted_at":null},
+{"id":"8","user_id":"1","name":"New House Bundle","description":"<p>A bundle to help your house more comfortable.<\/p>","created_at":"2021-01-16 05:14:14","updated_at":"2021-01-16 05:14:14","deleted_at":null}
+]

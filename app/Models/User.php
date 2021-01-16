@@ -109,4 +109,19 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return 'App.User.' . $this->id;
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function adminRooms()
+    {
+        return $this->hasMany(Room::class, 'admin_id');
+    }
+
+    public function room()
+    {
+        return $this->hasOne(Room::class, 'user_id');
+    }
 }

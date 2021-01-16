@@ -45,7 +45,7 @@ class BundleController extends Controller
             })
             ->leftJoin('reviews', function ($join) {
                 $join->on('reviews.reviewable_id', '=', 'bundles.id')->where('reviews.reviewable_type', '=', 'App\\Models\\Bundle');
-            })->select('bundles.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id', 'bundles.user_id', 'bundles.name', 'bundles.description', 'bundles.created_at', 'bundles.updated_at', 'bundles.deleted_at')->withCount('likes')->orderBy($orderBy, $orderDir);
+            })->select('bundles.*', DB::raw('AVG(rating) as avg_rating'))->groupBy('id', 'bundles.user_id', 'bundles.name', 'bundles.description', 'bundles.created_at', 'bundles.updated_at', 'bundles.deleted_at')->withCount('likes')->with('products')->orderBy($orderBy, $orderDir);
         return BundleResource::collection($bundles->paginate(12));
     }
 

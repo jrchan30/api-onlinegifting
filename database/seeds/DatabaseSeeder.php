@@ -40,8 +40,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             CategoriableSeeder::class,
             ProductSeeder::class,
+            BundleSeeder::class,
+            DetailSeeder::class,
             ImageSeeder::class,
-            // BundleSeeder::class,
             // UserSeeder::class,
             // TransactionSeeder::class
         ]);

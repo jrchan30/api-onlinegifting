@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             BundleSeeder::class,
             DetailSeeder::class,
             ImageSeeder::class,
+            ProductableSeeder::class,
             // UserSeeder::class,
             // TransactionSeeder::class
         ]);

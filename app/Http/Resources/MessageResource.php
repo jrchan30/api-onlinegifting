@@ -18,7 +18,8 @@ class MessageResource extends JsonResource
             'id' => $this->id,
             'room_id' => $this->room_id,
             'user_id' => $this->user_id,
-            'message' => $this->message
+            'message' => $this->message,
+            'user' => new UserResource($this->whenLoaded('user'))
         ];
     }
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -15,7 +18,8 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return MessageResource::collection(Message::all());
+        $messages = Message::with('user')->get();
+        return MessageResource::collection($messages);
     }
 
     /**
@@ -26,7 +30,25 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $this->validate($request, [
+            'message' => 'string|required'
+        ]);
+
+        $uid = auth()->user()->id;
+        $user = User::find($uid);
+
+        if ($user->room()->exists()) {
+            $room = Room::where('user_id', $uid)->first();
+        } else {
+            $room = Room::create([
+                'user_id' => $uid,
+                'admin_id' => 1,
+            ]);
+        }
+
+        $room->message()->create([
+            'message' => $validated['message']
+        ]);
     }
 
     /**

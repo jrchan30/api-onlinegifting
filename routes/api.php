@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('likes', 'LikeController');
     Route::apiResource('discussions', 'DiscussionController');
     Route::apiResource('replies', 'ReplyController');
+    Route::apiResource('messages', 'MessageController');
 
     Route::post('/reviews', 'ReviewController@store');
 

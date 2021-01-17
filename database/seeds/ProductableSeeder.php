@@ -24,5 +24,6 @@ class ProductableSeeder extends Seeder
                 'quantity' => $obj->quantity,
             ]);
         }
+        //test
     }
 }

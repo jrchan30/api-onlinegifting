@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoomResource extends JsonResource
@@ -14,10 +15,13 @@ class RoomResource extends JsonResource
      */
     public function toArray($request)
     {
+        $user = User::find($this->user_id);
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'admin_id' => $this->admin_id
+            'admin_id' => $this->admin_id,
+            'user' => $user,
+            'messages' => MessageResource::collection($this->messages),
         ];
     }
 }

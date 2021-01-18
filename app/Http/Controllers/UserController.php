@@ -33,7 +33,7 @@ class UserController extends Controller
     public function me()
     {
         $user = auth()->user();
-        WebsocketDemoEvent::dispatch("test123");
+        // WebsocketDemoEvent::dispatch("test123");
         return new UserResource($user);
     }
 

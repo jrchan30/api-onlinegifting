@@ -40,6 +40,10 @@ class RegisterController extends Controller
 
         $user->userDetail()->create();
         $user->cart()->create();
+        $user->room()->create([
+            'user_id' => $user->id,
+            'admin_id' => 1,
+        ]);
 
         return response()->json(["message" => "Success"], 200);
     }

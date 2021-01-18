@@ -10,6 +10,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource(Auth::user());
 });
 
+// Route::middleware('auth:sanctum')->post('broadcasting/auth', function (Request $request) {
+
+//     $pusher = new Pusher\Pusher(
+//         config('websockets.apps.key'),
+//         config('websockets.apps.secret'),
+//         config('websockets.apps.id'),
+//     );
+
+//     return $pusher->socket_auth($request->request->get('channel_name'), $request->request->get('socket_id'));
+// });
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 Route::post('register', 'Auth\RegisterController@register');
 Route::post('verification/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verification/resend', 'Auth\VerificationController@resend');
@@ -38,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('discussions', 'DiscussionController');
     Route::apiResource('replies', 'ReplyController');
     Route::apiResource('messages', 'MessageController');
+    Route::apiResource('rooms', 'RoomController');
 
     Route::post('/reviews', 'ReviewController@store');
 

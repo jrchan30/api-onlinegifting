@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\Room;
@@ -31,24 +32,40 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validate($request, [
-            'message' => 'string|required'
+            'message' => 'string|required',
+            'room_id' => 'sometimes'
         ]);
 
         $uid = auth()->user()->id;
         $user = User::find($uid);
 
-        if ($user->room()->exists()) {
+        // if ($user->room()->exists()) {
+        if (!$request->has('room_id')) {
             $room = Room::where('user_id', $uid)->first();
         } else {
-            $room = Room::create([
-                'user_id' => $uid,
-                'admin_id' => 1,
-            ]);
+            $room = Room::find($validated['room_id']);
         }
+        // }
+        //  else {
+        //     $room = Room::create([
+        //         'user_id' => $request->has('room_id') ? $validated[$uid,
+        //         'admin_id' => 1,
+        //     ]);
+        // }
 
-        $room->message()->create([
+        $message = $room->messages()->create([
+            'user_id' => $uid,
             'message' => $validated['message']
         ]);
+
+        $message->load('user');
+        // MessageSent::dispatch($message);
+
+        // broadcast(new MessageSent($message->load('user')))->toOthers();
+        // broadcast(new MessageSent($message->load('user')));
+        broadcast(new MessageSent($message))->toOthers();
+
+        return new MessageResource($message);
     }
 
     /**

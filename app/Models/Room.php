@@ -19,6 +19,11 @@ class Room extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->hasOne(User::class, 'id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }

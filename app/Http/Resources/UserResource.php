@@ -45,7 +45,7 @@ class UserResource extends JsonResource
             'type' => $this->userDetail->type ?? 'customer',
             'created_at' => $this->created_at->diffForHumans(),
             'profile_pic' => $this->userDetail->image->url ?? '/image/bx-user.svg',
-            'room_id' => $this->room->id
+            'room_id' => $this->room->id ?? null
             // 'cart' => $cart,
             // 'liked_products' => $liked_products ? ProductResource::collection($liked_products) : null,
             // 'liked_bundles' => $liked_bundles ? BundleResource::collection($liked_bundles) : null,

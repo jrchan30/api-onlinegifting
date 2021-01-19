@@ -42,5 +42,6 @@ class MessageSent implements ShouldBroadcast
     {
         // return new PrivateChannel('chat.' . $this->message->room->id);
         return new Channel('chat.' . $this->message->room->id);
+        // return new PresenceChannel('chat.' . $this->message->room->id);
     }
 }

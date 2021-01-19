@@ -10,16 +10,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource(Auth::user());
 });
 
-Route::middleware('auth:sanctum')->post('broadcasting/auth', function (Request $request) {
+// Route::middleware('auth:sanctum')->post('broadcasting/auth', function (Request $request) {
 
-    $pusher = new Pusher\Pusher(
-        config('websockets.apps.key'),
-        config('websockets.apps.secret'),
-        config('websockets.apps.id'),
-    );
+//     $pusher = new Pusher\Pusher(
+//         config('websockets.apps.key'),
+//         config('websockets.apps.secret'),
+//         config('websockets.apps.id'),
+//     );
 
-    return $pusher->socket_auth($request->request->get('chat.1'), $request->request->get('socket_id'));
-});
+//     return $pusher->socket_auth($request->request->get('chat.1'), $request->request->get('socket_id'));
+// });
 
 // Route::middleware('auth:sanctum')->post('broadcasting/auth', function (Request $request) {
 //     $pusher = new Pusher\Pusher(

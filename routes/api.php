@@ -44,6 +44,16 @@ Route::get('/payments/completed', 'PaymentController@completed');
 Route::get('/payments/failed', 'PaymentController@failed');
 Route::get('/payments/unfinish', 'PaymentController@unfinish');
 
+Route::post('/notifications', 'NotificationController@store');
+Route::get('/notifications', 'NotificationController@index');
+Route::patch('/notifications/{id}/read', 'NotificationController@markAsRead');
+Route::post('/notifications/mark-all-read', 'NotificationController@markAllRead');
+Route::post('/notifications/{id}/dismiss', 'NotificationController@dismiss');
+
+// Push Subscriptions
+Route::post('/subscriptions', 'PushSubscriptionController@update');
+Route::post('/subscriptions/delete', 'PushSubscriptionController@destroy');
+
 
 Route::get('/reviews', 'ReviewController@index');
 

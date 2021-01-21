@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\BundleResource;
 use App\Models\Category;
 use App\Models\Image;
+use App\Notifications\NewBundleNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use NotificationChannels\WebPush\PushSubscription;
 
 class BundleController extends Controller
 {
@@ -77,7 +80,8 @@ class BundleController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'required|numeric',
             'image' => 'required|image',
-            'design' => 'required|string'
+            'design' => 'required|string',
+            'isNotif' => 'sometimes|boolean',
         ]);
 
         $id = auth()->user()->id;
@@ -114,6 +118,15 @@ class BundleController extends Controller
             $bundle->detail->categories()->attach($cat);
         }
 
+        $subscribed_ids = PushSubscription::all()->pluck('subscribable_id');
+        $user = User::whereIn('id', $subscribed_ids)->where('id', '!=', $request->user()->id)->get();
+
+        // return $bundle;
+        if ($request->has('isNotif')) {
+            if ($validated['isNotif'] == true) {
+                Notification::send($user, new NewBundleNotification($bundle));
+            }
+        }
 
 
         // $bundle->detail()->categories()->attach($cat);

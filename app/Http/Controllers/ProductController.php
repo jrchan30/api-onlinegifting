@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\CategoryResource;
+use App\Models\User;
+use App\Notifications\NewProductNotification;
+use Illuminate\Support\Facades\Notification;
+use NotificationChannels\WebPush\PushSubscription;
 
 class ProductController extends Controller
 {
@@ -136,6 +140,7 @@ class ProductController extends Controller
             'categories.*' => 'required|numeric',
             'images' => 'required|array',
             'images.*' => 'required|image',
+            'isNotif' => 'sometimes|boolean'
         ]);
 
         $product = Product::create([
@@ -164,6 +169,15 @@ class ProductController extends Controller
             $cat = Category::find($categoryId);
 
             $product->categories()->attach($cat);
+        }
+
+        $subscribed_ids = PushSubscription::all()->pluck('subscribable_id');
+        $user = User::whereIn('id', $subscribed_ids)->where('id', '!=', $request->user()->id)->get();
+
+        if ($request->has('isNotif')) {
+            if ($validated['isNotif'] == true) {
+                Notification::send($user, new NewProductNotification($product));
+            }
         }
 
         return new ProductResource($product);

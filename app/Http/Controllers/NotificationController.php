@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
+use App\Models\User;
 use App\Notifications\HelloNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use NotificationChannels\WebPush\PushSubscription;
 
 class NotificationController extends Controller
@@ -54,8 +56,12 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->user()->notify(new HelloNotification);
-
+        // return $request->user()->id;
+        $subscribed_ids = PushSubscription::all()->pluck('subscribable_id');
+        $user = User::whereIn('id', $subscribed_ids)->where('id', '!=', $request->user()->id)->get();
+        // return $user;
+        // $request->user()->notify(new HelloNotification);
+        Notification::send($user, new HelloNotification);
         // return $request->user()->notify(new HelloNotification);
 
         return response()->json('Notification sent.', 201);

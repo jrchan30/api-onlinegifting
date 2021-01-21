@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,18 +11,20 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
 
-class HelloNotification extends Notification
+class NewProductNotification extends Notification
 {
     use Queueable;
+
+    public $product;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Product $product)
     {
-        //
+        $this->product = $product;
     }
 
     /**
@@ -32,8 +35,8 @@ class HelloNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'broadcast', WebPushChannel::class];
-        // return [WebPushChannel::class];
+        // return ['database', 'broadcast', WebPushChannel::class];
+        return [WebPushChannel::class];
     }
 
     /**
@@ -45,11 +48,15 @@ class HelloNotification extends Notification
      */
     public function toWebPush($notifiable, $notification)
     {
+        // $url = url('/products/' . $this->product->id);
+        $image = $this->product->images()->first();
+
         return (new WebPushMessage)
-            ->title('Hello from Online Gifting!')
-            ->icon('/icon-og.png')
-            ->body('Thank you for using our application.')
-            ->action('View app', 'view_app')
+            ->title('Online Gifting - New Product Added')
+            // ->icon('/icon-og.png')
+            ->icon($image->url)
+            ->body($this->product->name . ' (Rp.' . $this->product->price . ',-)')
+            ->action('View product', 'view_product|' . $this->product->id)
             ->data(['id' => $notification->id]);
     }
 
@@ -62,9 +69,9 @@ class HelloNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'title' => 'Hello from Online Gifting!',
-            'body' => 'Thank you for using our application.',
-            'action_url' => 'https://onlinegifting.shop',
+            'title' => 'New Product Added (Online Gifting)',
+            'body' => $this->product->name . '(' . $this->product->price . ')',
+            'action_url' => 'https://onlinegifting.shop/products/' . $this->product->id,
             'created' => Carbon::now()->toIso8601String(),
         ];
     }

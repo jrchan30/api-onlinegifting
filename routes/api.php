@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', 'UserController@me');
     Route::get('/users', 'UserController@index');
     Route::patch('/users/{id}', 'UserController@update');
+    Route::patch('/edit-profile-picture', 'UserController@editProfilePicture');
     Route::get('/admins', 'UserController@admins');
     Route::delete('/users/{id}', 'UserController@destroy');
 

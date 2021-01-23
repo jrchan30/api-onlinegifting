@@ -15,22 +15,22 @@ class WebsocketDemoEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $testing;
+    public $test;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($somedata)
+    public function __construct($test)
     {
-        $this->testing = $somedata;
+        $this->test = $test;
     }
 
-    public function broadcastAs()
-    {
-        return 'demo.test';
-    }
+    // public function broadcastAs()
+    // {
+    //     return 'demo.test';
+    // }
     /**
      * Get the channels the event should broadcast on.
      *
@@ -39,6 +39,7 @@ class WebsocketDemoEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         // return new PrivateChannel('DemoChannel');
-        return new Channel('DemoChannel');
+        return [new PrivateChannel("App.User.{$this->userId}")];
+        // return new Channel('DemoChannel');
     }
 }

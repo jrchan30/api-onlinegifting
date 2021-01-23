@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
+use App\Events\WebsocketDemoEvent;
 use App\Models\User;
 use App\Notifications\HelloNotification;
 use Illuminate\Http\Request;
@@ -63,6 +64,7 @@ class NotificationController extends Controller
         // $request->user()->notify(new HelloNotification);
         Notification::send($user, new HelloNotification);
         // return $request->user()->notify(new HelloNotification);
+        broadcast(new WebsocketDemoEvent('ini test private dari controller'));
 
         return response()->json('Notification sent.', 201);
     }

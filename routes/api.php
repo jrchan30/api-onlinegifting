@@ -104,6 +104,7 @@ Route::post('/user-search', "UserSearchController");
 Route::apiResource('bundles', 'BundleController');
 Route::apiResource('categories', 'CategoryController');
 Route::apiResource('products', 'ProductController');
+Route::get('/get-bundled/{id}', 'ProductController@getBundled');
 Route::get('/latest-products', 'ProductController@latestProducts');
 Route::get('/low-price', 'ProductController@lowPrice');
 

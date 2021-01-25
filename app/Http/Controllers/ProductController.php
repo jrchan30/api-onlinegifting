@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\WebsocketDemoEvent;
+use App\Http\Resources\BundleResource;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Category;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\CategoryResource;
+use App\Models\Bundle;
 use App\Models\User;
 use App\Notifications\NewProductNotification;
 use Illuminate\Support\Facades\Notification;
@@ -21,7 +23,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('check.admin', ['except' => ['index', 'show', 'latestProducts', 'lowPrice']]);
+        $this->middleware('check.admin', ['except' => ['index', 'show', 'latestProducts', 'lowPrice', 'getBundled']]);
     }
     /**
      * Display a listing of the resource.
@@ -192,6 +194,15 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return new ProductResource($product);
+    }
+
+    public function getBundled($id)
+    {
+        $bundles = Bundle::whereHas('products', function ($q) use ($id) {
+            $q->where('products.id', $id);
+        })->get();
+
+        return BundleResource::collection($bundles);
     }
 
     /**

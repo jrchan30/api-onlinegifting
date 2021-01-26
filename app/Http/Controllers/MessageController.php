@@ -7,6 +7,7 @@ use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\User;
+use App\Notifications\NewMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,9 +62,16 @@ class MessageController extends Controller
         $message->load('user');
         // MessageSent::dispatch($message);
 
-        // broadcast(new MessageSent($message->load('user')))->toOthers();
+        broadcast(new MessageSent($message->load('user')));
         // broadcast(new MessageSent($message->load('user')));
-        broadcast(new MessageSent($message))->toOthers();
+        // broadcast(new MessageSent($message))->toOthers();
+
+        // if (Auth::user()->userDetail->type == 'customer') {
+        //     $model = User::find(1);
+        // } else {
+        //     $model = User::find($room->user_id);
+        // }
+        // $model->notify(new NewMessage($message));
 
         return new MessageResource($message);
     }

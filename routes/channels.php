@@ -26,13 +26,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('chat.{id}', function ($user, $id) {
-    // $current_user = User::find($user->id);
-    // if ($current_user->userDetail->type == 'customer') {
-    //     return (int) $user->id === $room->user_id;
-    // } else {
-    //     return true;
-    // }
-
-    // return true;
-    return true;
+    if ($user->userDetail->type == 'customer') {
+        return (int) $user->id === $user->room->user_id;
+    } else {
+        return true;
+    }
 });

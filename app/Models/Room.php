@@ -14,12 +14,13 @@ class Room extends Model
 
     public function admin()
     {
-        return $this->hasOne(User::class, 'admin_id');
+        // return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'admin_id');
     }
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function messages()

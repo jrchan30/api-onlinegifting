@@ -39,6 +39,10 @@ class BundleController extends Controller
         $max = $request->get('max') ?? 10000000;
 
         $bundles = Bundle::where('name', 'LIKE', $search)
+            ->whereHas('products', function ($query) use ($min, $max) {
+                $query->select(DB::raw('SUM(price) sumPrice'))
+                    ->having('sumPrice', '>=', $min)->having('sumPrice', '<=', $max);
+            })
             ->when($categories !== 'all', function ($q) use ($categories) {
                 return $q->whereHas('detail', function ($query) use ($categories) {
                     $query->whereHas('categories', function ($q) use ($categories) {
